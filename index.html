@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>도쿄 · 홋카이도 여행 일정표</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
+  :root{
+    --indigo:#22335C;
+    --indigo-line:#3B4E85;
+    --gold:#B8912B;
+    --lavender:#7A6BB0;
+    --lavender-bg:#F0EDF8;
+    --coral:#C4552F;
+    --coral-bg:#FBEBE3;
+    --paper:#FAF8F3;
+    --card:#FFFFFF;
+    --ink:#22262F;
+    --ink-soft:#6B6F7A;
+    --line:#E4E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans KR',sans-serif;
+    padding:0 0 60px;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:36px 24px;}
+
+  .hero{
+    background:var(--indigo);
+    color:#F4F2EA;
+    border-radius:18px;
+    padding:28px 32px;
+    margin-bottom:28px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero h1{
+    font-family:'Noto Serif KR',serif;
+    font-weight:700;
+    font-size:26px;
+    margin:0 0 6px;
+  }
+  .hero .sub{font-size:14px;color:#C7CBE0;margin:0 0 18px;}
+  .hero .route{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    letter-spacing:0.5px;
+    color:#F4F2EA;
+    display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+  }
+  .hero .route span.stop{
+    background:rgba(255,255,255,0.1);
+    padding:4px 10px;border-radius:20px;
+  }
+  .hero .route span.arrow{color:var(--gold);}
+
+  .car-note{
+    display:flex;gap:10px;align-items:flex-start;
+    background:var(--lavender-bg);
+    border:1px solid #DAD3EE;
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:13px;
+    color:#4A3F72;
+    margin-bottom:32px;
+  }
+
+  .timeline{position:relative;padding-left:28px;}
+  .timeline::before{
+    content:"";
+    position:absolute;left:8px;top:6px;bottom:6px;
+    width:2px;background:var(--indigo-line);
+  }
+
+  .day{position:relative;margin-bottom:36px;}
+  .day::before{
+    content:attr(data-num);
+    position:absolute;left:-28px;top:2px;
+    width:18px;height:18px;
+    background:var(--gold);
+    color:#22262F;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;font-weight:700;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    border:3px solid var(--paper);
+  }
+
+  .day-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .day-head h2{
+    font-family:'Noto Serif KR',serif;
+    font-size:18px;font-weight:700;margin:0;
+  }
+  .day-head .loc{
+    font-size:12px;color:var(--ink-soft);
+    background:#EFEDE3;padding:2px 10px;border-radius:20px;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 20px;
+  }
+
+  .flight{
+    display:flex;align-items:center;gap:14px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    background:#F4F1E6;
+    border:1px solid #E6E1CE;
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:10px;
+    color:#5A4E1F;
+  }
+  .flight .badge{
+    background:var(--gold);color:#2C2308;
+    padding:2px 8px;border-radius:6px;font-weight:700;
+  }
+  .flight .path{flex:1;color:#3A3120;}
+  .flight .time{font-weight:700;color:#22262F;}
+
+  .hotel-block, .car-block{
+    display:flex;gap:10px;align-items:flex-start;
+    border-radius:10px;padding:10px 14px;margin-bottom:10px;
+    font-size:12.5px;
+  }
+  .hotel-block{background:var(--lavender-bg);border:1px solid #DAD3EE;}
+  .car-block{background:#EAF3E4;border:1px solid #CFE5C3;}
+  .hotel-block .tag, .car-block .tag{
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    padding:2px 8px;border-radius:6px;white-space:nowrap;
+  }
+  .hotel-block .tag{background:var(--lavender);color:#fff;}
+  .car-block .tag{background:#4E7A3A;color:#fff;}
+  .hotel-block .info b, .car-block .info b{display:block;font-size:13px;color:#22262F;}
+  .hotel-block .info span, .car-block .info span{color:#5A5470;}
+
+  .list{list-style:none;margin:0;padding:0;}
+  .list li{
+    display:flex;align-items:flex-start;gap:8px;
+    padding:8px 0;border-bottom:1px solid var(--line);
+  }
+  .list li:last-child{border-bottom:none;}
+  .list .t{
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+    color:var(--ink-soft);min-width:46px;max-width:70px;padding-top:2px;
+    outline:none;border-radius:6px;padding:2px 4px;margin:-2px -4px -2px -0px;
+  }
+  .list .t:focus{background:#F5F3EA;color:var(--ink);}
+  .list .txt{
+    flex:1;outline:none;font-size:14px;line-height:1.5;
+    border-radius:6px;padding:2px 6px;margin:-2px -6px;
+  }
+  .list .txt:focus{background:#F5F3EA;}
+  .list .reorder{display:flex;flex-direction:column;gap:1px;padding-top:1px;}
+  .list .reorder button{
+    border:none;background:none;color:#C7C4B7;cursor:pointer;font-size:9px;
+    line-height:1;padding:2px 3px;
+  }
+  .list .reorder button:hover:not(:disabled){color:var(--indigo);}
+  .list .reorder button:disabled{visibility:hidden;}
+  .list .del{
+    border:none;background:none;color:#BDBAAE;cursor:pointer;font-size:15px;
+    padding:0 4px;line-height:1.5;
+  }
+  .list .del:hover{color:var(--coral);}
+
+  .add-row{display:flex;gap:8px;margin-top:10px;}
+  .add-row input[type=text]{
+    font-family:'JetBrains Mono',monospace;font-size:12px;width:60px;
+    border:1px solid var(--line);border-radius:6px;padding:6px 8px;
+  }
+  .add-row input[type=text].name{
+    font-family:'Noto Sans KR',sans-serif;font-size:13px;flex:1;width:auto;
+  }
+  .add-row button{
+    border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;
+    border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;
+  }
+  .add-row button:hover{opacity:0.9;}
+
+  .suggest-title{font-size:12px;color:var(--ink-soft);margin:16px 0 8px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    border:1px solid #DAD3EE;background:var(--lavender-bg);color:#4A3F72;
+    font-size:12px;border-radius:20px;padding:6px 12px;cursor:pointer;
+  }
+  .chip.food{border-color:#EBC9B5;background:var(--coral-bg);color:#7A3A1D;}
+  .chip:hover{filter:brightness(0.95);}
+  .chip .r{opacity:0.6;font-size:11px;margin-left:4px;}
+
+  .save{
+    position:fixed;bottom:18px;right:24px;
+    font-size:11px;color:var(--ink-soft);
+    background:var(--card);border:1px solid var(--line);
+    padding:6px 12px;border-radius:20px;opacity:0;transition:opacity .3s;
+  }
+  .save.show{opacity:1;}
+
+  .todo-section{margin-bottom:32px;}
+  .todo-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;cursor:pointer;user-select:none;}
+  .todo-head .left{display:flex;align-items:center;gap:8px;}
+  .todo-head h2{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;margin:0;}
+  .todo-chevron{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:20px;height:20px;color:var(--ink-soft);
+    transition:transform .2s;font-size:12px;
+  }
+  .todo-chevron.collapsed{transform:rotate(-90deg);}
+  .todo-progress{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .todo-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;}
+  .todo-card.collapsed{display:none;}
+  .todo-cat-head{
+    display:flex;align-items:center;justify-content:space-between;
+    margin:14px 0 6px;gap:8px;
+  }
+  .todo-cat-head:first-child{margin-top:0;}
+  .todo-cat{
+    font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;
+    outline:none;border-radius:4px;padding:2px 4px;margin:-2px -4px;flex:1;
+  }
+  .todo-cat:focus{background:#F8F3E4;}
+  .todo-cat-del{
+    border:none;background:none;color:#D8D4C4;cursor:pointer;font-size:12px;padding:0 4px;
+  }
+  .todo-cat-del:hover{color:var(--coral);}
+  .todo-list{list-style:none;margin:0;padding:0;}
+  .todo-list li{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:7px 0;border-bottom:1px solid var(--line);
+  }
+  .todo-list li:last-child{border-bottom:none;}
+  .todo-list input[type=checkbox]{
+    margin-top:3px;width:16px;height:16px;accent-color:var(--indigo);cursor:pointer;flex-shrink:0;
+  }
+  .todo-list .txt2{
+    flex:1;outline:none;font-size:14px;line-height:1.5;
+    border-radius:6px;padding:2px 6px;margin:-2px -6px;
+  }
+  .todo-list .txt2:focus{background:#F5F3EA;}
+  .todo-list li.done .txt2{color:var(--ink-soft);text-decoration:line-through;}
+  .todo-list .del{
+    border:none;background:none;color:#BDBAAE;cursor:pointer;font-size:15px;padding:0 4px;
+  }
+  .todo-list .del:hover{color:var(--coral);}
+  .todo-add-row{display:flex;gap:8px;margin-top:12px;}
+  .todo-add-row select{
+    font-family:'Noto Sans KR',sans-serif;font-size:12px;
+    border:1px solid var(--line);border-radius:6px;padding:6px 8px;
+  }
+  .todo-add-row input[type=text]{
+    font-family:'Noto Sans KR',sans-serif;font-size:13px;flex:1;
+    border:1px solid var(--line);border-radius:6px;padding:6px 10px;
+  }
+  .todo-add-row button{
+    border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;
+    border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;
+  }
+  .todo-add-cat-row{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);}
+  .todo-add-cat-row input[type=text]{
+    font-family:'Noto Sans KR',sans-serif;font-size:13px;flex:1;
+    border:1px solid var(--line);border-radius:6px;padding:6px 10px;
+  }
+  .todo-add-cat-row button{
+    border:1px solid var(--lavender);background:var(--lavender-bg);color:#4A3F72;
+    border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>도쿄 · 홋카이도 여행</h1>
+    <p class="sub">2026.08.23 (일) — 08.28 (금) · ANA EF9RIK</p>
+    <div class="route">
+      <span class="stop">서울</span><span class="arrow">✈</span>
+      <span class="stop">도쿄</span><span class="arrow">✈</span>
+      <span class="stop">삿포로</span><span class="arrow">🚗</span>
+      <span class="stop">비에이·후라노</span><span class="arrow">🚗</span>
+      <span class="stop">삿포로</span><span class="arrow">✈</span>
+      <span class="stop">도쿄</span><span class="arrow">✈</span>
+      <span class="stop">서울</span>
+    </div>
+  </div>
+
+  <div class="car-note">🚗 <div><b>렌터카 이동</b> — 삿포로 신치토세공항에서 픽업 후 비에이/후라노까지 약 2시간, 반납은 신치토세공항 권장. 라벤더 시즌(7-8월) 성수기이므로 사전 예약 필수.</div>
+  </div>
+
+  <div class="todo-section">
+    <div class="todo-head" id="todo-head">
+      <div class="left">
+        <span class="todo-chevron" id="todo-chevron">▾</span>
+        <h2>✅ 출발 전 준비 체크리스트</h2>
+      </div>
+      <span class="todo-progress" id="todo-progress"></span>
+    </div>
+    <div class="todo-card" id="todo-card"></div>
+  </div>
+
+  <div class="timeline" id="timeline"></div>
+</div>
+
+<div class="save" id="save">저장됨</div>
+
+<script>
+let todoCategories = ["서류/신분", "렌터카", "통신/결제", "다이세츠잔 등산", "숙소/매너", "짐/기타"];
+let todoCollapsed = false;
+
+let todos = [
+  {cat:"서류/신분", t:"여권 유효기간 확인 (입국일 기준 6개월 이상)", done:false},
+  {cat:"서류/신분", t:"국제운전면허증 발급 (경찰서/운전면허시험장, 여권+사진)", done:false},
+  {cat:"서류/신분", t:"Visit Japan Web 사전 등록 (입국심사/세관 QR)", done:false},
+  {cat:"서류/신분", t:"ANA 온라인 체크인 (출발 24시간 전, 여권정보/좌석)", done:false},
+  {cat:"렌터카", t:"국제운전면허증 + 한국 운전면허증 원본 둘 다 지참", done:false},
+  {cat:"렌터카", t:"오릭스렌터카 예약 확인서(예약번호 101838062) 캡처/출력", done:false},
+  {cat:"렌터카", t:"내비게이션 한국어 설정 가능 여부 확인", done:false},
+  {cat:"렌터카", t:"홋카이도 겨울/우천 대비 타이어 옵션 확인 (8월은 일반 타이어)", done:false},
+  {cat:"통신/결제", t:"eSIM 또는 포켓와이파이 예약", done:false},
+  {cat:"통신/결제", t:"엔화 환전 또는 트래블카드 준비", done:false},
+  {cat:"통신/결제", t:"해외여행자보험 가입", done:false},
+  {cat:"다이세츠잔 등산", t:"등산화/트레킹화 준비 (화산암 지대라 미끄러움, 운동화 비권장)", done:false},
+  {cat:"다이세츠잔 등산", t:"방풍·방한 겉옷 (정상부 8월에도 기온 낮고 바람 강함)", done:false},
+  {cat:"다이세츠잔 등산", t:"우비 (다이세츠잔은 날씨 급변이 잦음)", done:false},
+  {cat:"다이세츠잔 등산", t:"자외선 차단제·선글라스·모자 (고산지대 자외선 강함)", done:false},
+  {cat:"다이세츠잔 등산", t:"물/간식 소량 휴대", done:false},
+  {cat:"다이세츠잔 등산", t:"로프웨이 운행시간·요금 당일 아침 공식 사이트에서 재확인", done:false},
+  {cat:"다이세츠잔 등산", t:"불곰 출몰 지역 — 곰 방울/최근 목격정보 확인", done:false},
+  {cat:"숙소/매너", t:"료칸/온천 숙소 문신 여부 확인 (Aonobi Yuyu, La Vista Daisetsuzan)", done:false},
+  {cat:"숙소/매너", t:"호텔별 체크인 시간 메모 (모두 오후 이후, 조식/석식 포함 여부 확인)", done:false},
+  {cat:"짐/기타", t:"온천용 세면도구/속옷 여벌 (일부 숙소 어메니티 상이)", done:false},
+  {cat:"짐/기타", t:"여행자 카드/신용카드 해외결제 한도 확인", done:false}
+];
+
+const todoCard = document.getElementById('todo-card');
+const todoProgress = document.getElementById('todo-progress');
+const todoHead = document.getElementById('todo-head');
+const todoChevron = document.getElementById('todo-chevron');
+
+async function persistTodos(){
+  try{
+    await storageAPI.set('itinerary_todos', JSON.stringify({categories: todoCategories, items: todos, collapsed: todoCollapsed}), false);
+    flashSave();
+  }catch(e){ console.error('todo save failed', e); }
+}
+
+async function loadTodos(){
+  const defaultCategories = todoCategories.slice();
+  const defaultTodos = todos.slice();
+  try{
+    const res = await storageAPI.get('itinerary_todos', false);
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      if(parsed && Array.isArray(parsed.items) && Array.isArray(parsed.categories)){
+        todos = parsed.items;
+        todoCategories = parsed.categories;
+        todoCollapsed = !!parsed.collapsed;
+        defaultCategories.forEach(c=>{ if(!todoCategories.includes(c)) todoCategories.push(c); });
+        defaultTodos.forEach(dt=>{
+          if(!todos.some(t=> t.t === dt.t)) todos.push(dt);
+        });
+      }
+    }
+  }catch(e){ /* no saved todos yet, use defaults */ }
+}
+
+function applyCollapsedState(){
+  todoCard.classList.toggle('collapsed', todoCollapsed);
+  todoChevron.classList.toggle('collapsed', todoCollapsed);
+}
+
+todoHead.addEventListener('click', ()=>{
+  todoCollapsed = !todoCollapsed;
+  applyCollapsedState();
+  persistTodos();
+});
+
+function renderTodos(){
+  const done = todos.filter(x=>x.done).length;
+  todoProgress.textContent = `${done} / ${todos.length} 완료`;
+  applyCollapsedState();
+
+  let html = '';
+  todoCategories.forEach((cat, ci)=>{
+    const items = todos.map((x,i)=>({...x,idx:i})).filter(x=>x.cat===cat);
+    html += `<div class="todo-cat-head">
+      <span class="todo-cat" contenteditable="true" data-cat-idx="${ci}">${cat}</span>
+      <button class="todo-cat-del" data-cat-idx="${ci}" aria-label="카테고리 삭제">카테고리 삭제 ✕</button>
+    </div><ul class="todo-list">`;
+    items.forEach(it=>{
+      html += `<li class="${it.done?'done':''}">
+        <input type="checkbox" data-idx="${it.idx}" ${it.done?'checked':''}>
+        <span class="txt2" contenteditable="true" data-idx="${it.idx}">${it.t}</span>
+        <button class="del" data-idx="${it.idx}" aria-label="삭제">✕</button>
+      </li>`;
+    });
+    if(!items.length){
+      html += `<li style="color:var(--ink-soft);font-size:13px;">항목 없음</li>`;
+    }
+    html += `</ul>`;
+  });
+
+  html += `<div class="todo-add-row">
+    <select id="todo-cat-select">${todoCategories.map(c=>`<option value="${c}">${c}</option>`).join('')}</select>
+    <input type="text" id="todo-new-input" placeholder="준비할 항목 추가...">
+    <button id="todo-add-btn">추가</button>
+  </div>
+  <div class="todo-add-cat-row">
+    <input type="text" id="todo-new-cat-input" placeholder="새 카테고리 이름...">
+    <button id="todo-add-cat-btn">카테고리 추가</button>
+  </div>`;
+
+  todoCard.innerHTML = html;
+
+  todoCard.querySelectorAll('input[type=checkbox]').forEach(el=>{
+    el.addEventListener('change', e=>{
+      const i = +e.target.dataset.idx;
+      todos[i].done = e.target.checked;
+      persistTodos();
+      renderTodos();
+    });
+  });
+  todoCard.querySelectorAll('.txt2').forEach(el=>{
+    el.addEventListener('blur', e=>{
+      const i = +e.target.dataset.idx;
+      todos[i].t = e.target.textContent.trim();
+      persistTodos();
+    });
+  });
+  todoCard.querySelectorAll('.del').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const i = +e.target.dataset.idx;
+      todos.splice(i,1);
+      persistTodos();
+      renderTodos();
+    });
+  });
+  todoCard.querySelectorAll('.todo-cat').forEach(el=>{
+    el.addEventListener('blur', e=>{
+      const ci = +e.target.dataset.catIdx;
+      const oldName = todoCategories[ci];
+      const newName = e.target.textContent.trim();
+      if(newName && newName !== oldName){
+        todoCategories[ci] = newName;
+        todos.forEach(t=>{ if(t.cat === oldName) t.cat = newName; });
+        persistTodos();
+        renderTodos();
+      }
+    });
+  });
+  todoCard.querySelectorAll('.todo-cat-del').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const ci = +e.target.dataset.catIdx;
+      const catName = todoCategories[ci];
+      const hasItems = todos.some(t=>t.cat===catName);
+      if(hasItems && !confirm(`"${catName}" 카테고리에 항목이 있어요. 카테고리와 그 안의 모든 항목을 삭제할까요?`)) return;
+      todoCategories.splice(ci,1);
+      todos = todos.filter(t=>t.cat!==catName);
+      persistTodos();
+      renderTodos();
+    });
+  });
+  const addBtn = document.getElementById('todo-add-btn');
+  if(addBtn){
+    addBtn.addEventListener('click', ()=>{
+      const sel = document.getElementById('todo-cat-select');
+      const input = document.getElementById('todo-new-input');
+      if(input.value.trim()){
+        todos.push({cat: sel.value, t: input.value.trim(), done:false});
+        persistTodos();
+        renderTodos();
+      }
+    });
+  }
+  const addCatBtn = document.getElementById('todo-add-cat-btn');
+  if(addCatBtn){
+    addCatBtn.addEventListener('click', ()=>{
+      const input = document.getElementById('todo-new-cat-input');
+      const name = input.value.trim();
+      if(name && !todoCategories.includes(name)){
+        todoCategories.push(name);
+        persistTodos();
+        renderTodos();
+      }
+    });
+  }
+}
+
+const days = [
+  {
+    num:1, date:"8/23 (일)", loc:"서울 → 도쿄",
+    flights:[{badge:"NH862",path:"서울(김포) → 도쿄(하네다)",time:"07:40 → 09:50"}],
+    hotel:{name:"remm Roppongi (레무 롯폰기)",addr:"7-14-4 Roppongi, Minato-ku, Tokyo",inout:"체크인 14:00"},
+    items:[
+      {t:"10:30", x:"공항 → 롯폰기 숙소 이동, 짐 보관"},
+      {t:"14:00~", x:"remm Roppongi 체크인"},
+      {t:"오후", x:"핫플 동네 산책 (시부야/오모테산도)"},
+      {t:"저녁", x:"도쿄 저녁 식사"}
+    ],
+    suggestKey:"tokyo"
+  },
+  {
+    num:2, date:"8/24 (월)", loc:"도쿄 → 삿포로",
+    flights:[{badge:"NH1105",path:"도쿄(하네다) → 삿포로(신치토세)",time:"15:30 → 17:05"}],
+    car:{event:"픽업", co:"오릭스렌터카 (Fit Hybrid급)",place:"신치토세공항점",time:"18:00"},
+    hotel:{name:"SAPPORO HOTEL by GRANBELL",addr:"Higashi-ku Kita 6-jo Higashi 2-2-2, Sapporo",inout:"체크인 15:00 (실제 도착은 저녁)"},
+    items:[
+      {t:"오전", x:"체크아웃(remm Roppongi), 도쿄 조식/근처 카페"},
+      {t:"12:00", x:"체크아웃 후 하네다공항 이동"},
+      {t:"18:00", x:"신치토세공항 렌터카(오릭스) 픽업"},
+      {t:"19:00~", x:"삿포로 시내 숙소(GRANBELL) 체크인"},
+      {t:"저녁", x:"삿포로 저녁 식사 (스시/라멘)"}
+    ],
+    suggestKey:"sapporo_food"
+  },
+  {
+    num:3, date:"8/25 (화)", loc:"삿포로 → 후라노",
+    flights:[],
+    hotel:{name:"FURANO HOTEL (후라노 호텔)",addr:"Gakuden Area 3, Furano",inout:"체크인/체크아웃 시간 미기재"},
+    items:[
+      {t:"오전", x:"체크아웃, 삿포로 → 후라노 렌터카 이동 (약 2시간)"},
+      {t:"오후", x:"후라노 라벤더밭 투어 (팜 토미타 등)"},
+      {t:"저녁", x:"FURANO HOTEL 체크인, 후라노 시내 저녁"}
+    ],
+    suggestKey:"nature"
+  },
+  {
+    num:4, date:"8/26 (수)", loc:"후라노 → 비에이(시라히게온천)",
+    flights:[],
+    hotel:{name:"Aonobi Yuyu (아오노비 유유)",addr:"Shirogane, Biei-cho, Kamikawa-gun (비에이 시라히게 온천 지역)",inout:"체크인 15:00 · 조식/석식 포함"},
+    items:[
+      {t:"오전", x:"체크아웃, 비에이 패치워크로드/파노라마로드 드라이브"},
+      {t:"오후", x:"시라히게 폭포 등 비에이 관광"},
+      {t:"15:00", x:"Aonobi Yuyu 체크인 (온천 숙소)"}
+    ],
+    suggestKey:"nature"
+  },
+  {
+    num:5, date:"8/27 (목)", loc:"비에이 → 다이세츠잔(아사히다케)",
+    flights:[],
+    hotel:{name:"Hotel La Vista Daisetsuzan -Kyoritsu Resort",addr:"Higashikawa-cho, Asahidake Onsen (아사히카와)",inout:"체크인 15:00 · 조식/석식 포함"},
+    items:[
+      {t:"07:00", x:"Aonobi Yuyu 조식 후 체크아웃 (가능하면 이른 체크아웃 요청 — 산 날씨는 오전이 맑을 확률 높음)"},
+      {t:"07:40", x:"비에이 시라히게 → 아사히다케 로프웨이 산록역 이동 (약 40~50분)"},
+      {t:"08:30", x:"아사히다케 로프웨이 탑승 (첫차~15분 간격 운행, 산록역 1,100m→스가타미역 1,600m, 약 10분)"},
+      {t:"09:00~11:00", x:"스가타미노이케 산책 코스 (약 1.7km, 1~1.5시간, 초보자도 가능)"},
+      {t:"11:30", x:"로프웨이 하행, 비지터센터/매점 둘러보기"},
+      {t:"오후", x:"아사히다케온천 마을 도착, 여유시간"},
+      {t:"15:00", x:"Hotel La Vista Daisetsuzan 체크인, 저녁"}
+    ],
+    suggestKey:"nature"
+  },
+  {
+    num:6, date:"8/28 (금)", loc:"아사히다케 → 신치토세 → 도쿄 → 서울",
+    flights:[
+      {badge:"NH074",path:"삿포로(신치토세) → 도쿄(하네다)",time:"17:25 → 19:05"},
+      {badge:"NH867",path:"도쿄(하네다) → 서울(김포)",time:"20:05 → 22:20"}
+    ],
+    car:{event:"반납",co:"오릭스렌터카",place:"신치토세공항점",time:"18:00 (여유있게 예약됨)"},
+    items:[
+      {t:"11:00", x:"체크아웃 (Hotel La Vista Daisetsuzan)"},
+      {t:"오전~오후", x:"아사히다케온천 → 신치토세공항 이동 (약 2.5~3시간)"},
+      {t:"19:05~20:05", x:"하네다 환승 대기 (약 1시간)"}
+    ],
+    suggestKey:"none"
+  }
+];
+
+const suggestions = {
+  nature:[
+    {n:"팜 토미타", r:4.4},
+    {n:"파노라마 로드", r:4.4},
+    {n:"패치워크 로드", r:4.3},
+    {n:"나카후라노 호쿠세이야마 라벤더밭", r:4.3},
+    {n:"칸노팜", r:4.1}
+  ],
+  sapporo_food:[
+    {n:"스시동 (Sushi-Don)", r:4.7},
+    {n:"테시카가 라멘", r:4.6},
+    {n:"타케에스시 (니조시장)", r:4.6},
+    {n:"마루스시", r:4.6},
+    {n:"삿포로 시계탑", r:3.9},
+    {n:"삿포로 TV타워", r:4.1}
+  ],
+  tokyo:[
+    {n:"올데이플레이스 시부야 인근 산책", r:4.1},
+    {n:"오모테산도 우카이테이 (테판야끼)", r:4.6},
+    {n:"레스토랑 이엔느", r:4.5},
+    {n:"JULIA (미쉐린)", r:4.8}
+  ]
+};
+
+const timeline = document.getElementById('timeline');
+const saveEl = document.getElementById('save');
+let saveTimer;
+
+// Claude 아티팩트의 window.storage가 없는 환경(예: GitHub Pages)에서는
+// localStorage로 자동 대체되는 래퍼
+const storageAPI = {
+  async get(key, shared=false){
+    if(window.storage){ return window.storage.get(key, shared); }
+    try{
+      const v = localStorage.getItem(key);
+      return v !== null ? {key, value:v, shared} : null;
+    }catch(e){ return null; }
+  },
+  async set(key, value, shared=false){
+    if(window.storage){ return window.storage.set(key, value, shared); }
+    try{
+      localStorage.setItem(key, value);
+      return {key, value, shared};
+    }catch(e){ return null; }
+  }
+};
+
+function flashSave(){
+  saveEl.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>saveEl.classList.remove('show'),1200);
+}
+
+const ITINERARY_VERSION = 2;
+
+async function persist(){
+  try{
+    await storageAPI.set('itinerary_days', JSON.stringify({version: ITINERARY_VERSION, days}), false);
+    flashSave();
+  }catch(e){ console.error('save failed', e); }
+}
+
+async function loadPersisted(){
+  try{
+    const res = await storageAPI.get('itinerary_days', false);
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      if(parsed && parsed.version === ITINERARY_VERSION && Array.isArray(parsed.days) && parsed.days.length === days.length){
+        parsed.days.forEach((d,i)=>{ days[i].items = d.items; });
+      }
+    }
+  }catch(e){ /* no saved data yet */ }
+}
+
+function render(){
+  timeline.innerHTML = '';
+  days.forEach((day, di)=>{
+    const el = document.createElement('div');
+    el.className = 'day';
+    el.setAttribute('data-num', day.num);
+
+    let flightsHtml = '';
+    day.flights.forEach(f=>{
+      flightsHtml += `<div class="flight"><span class="badge">${f.badge}</span><span class="path">${f.path}</span><span class="time">${f.time}</span></div>`;
+    });
+
+    let hotelHtml = '';
+    if(day.hotel){
+      hotelHtml = `<div class="hotel-block"><span class="tag">숙소</span><div class="info"><b>${day.hotel.name}</b><span>${day.hotel.addr} · ${day.hotel.inout}</span></div></div>`;
+    }
+    let carHtml = '';
+    if(day.car){
+      carHtml = `<div class="car-block"><span class="tag">차량${day.car.event}</span><div class="info"><b>${day.car.co}</b><span>${day.car.place} · ${day.car.time}</span></div></div>`;
+    }
+
+    let itemsHtml = '';
+    day.items.forEach((it, ii)=>{
+      itemsHtml += `<li>
+        <div class="reorder">
+          <button class="move-up" data-day="${di}" data-item="${ii}" ${ii===0?'disabled':''} aria-label="위로">▲</button>
+          <button class="move-down" data-day="${di}" data-item="${ii}" ${ii===day.items.length-1?'disabled':''} aria-label="아래로">▼</button>
+        </div>
+        <span class="t" contenteditable="true" data-day="${di}" data-item="${ii}">${it.t}</span>
+        <span class="txt" contenteditable="true" data-day="${di}" data-item="${ii}">${it.x}</span>
+        <button class="del" data-day="${di}" data-item="${ii}" aria-label="삭제">✕</button>
+      </li>`;
+    });
+
+    let chipsHtml = '';
+    const sk = day.suggestKey;
+    if(sk && sk !== 'none' && suggestions[sk]){
+      chipsHtml = `<div class="suggest-title">추천 장소 (클릭해서 추가)</div><div class="chips">`;
+      suggestions[sk].forEach(s=>{
+        const isFood = sk.indexOf('food')>=0;
+        chipsHtml += `<button class="chip ${isFood?'food':''}" data-day="${di}" data-place="${s.n}">${s.n}<span class="r">★${s.r}</span></button>`;
+      });
+      chipsHtml += `</div>`;
+    }
+
+    el.innerHTML = `
+      <div class="day-head"><h2>Day ${day.num} · ${day.date}</h2><span class="loc">${day.loc}</span></div>
+      <div class="card">
+        ${flightsHtml}
+        ${hotelHtml}
+        ${carHtml}
+        <ul class="list">${itemsHtml}</ul>
+        <div class="add-row">
+          <input type="text" class="time-in" placeholder="시간" data-day="${di}">
+          <input type="text" class="name" placeholder="일정 추가..." data-day="${di}">
+          <button data-day="${di}" class="add-btn">추가</button>
+        </div>
+        ${chipsHtml}
+      </div>
+    `;
+    timeline.appendChild(el);
+  });
+
+  document.querySelectorAll('.txt').forEach(el=>{
+    el.addEventListener('blur', e=>{
+      const d = +e.target.dataset.day, i = +e.target.dataset.item;
+      days[d].items[i].x = e.target.textContent.trim();
+      persist();
+    });
+  });
+  document.querySelectorAll('.list .t').forEach(el=>{
+    el.addEventListener('blur', e=>{
+      const d = +e.target.dataset.day, i = +e.target.dataset.item;
+      days[d].items[i].t = e.target.textContent.trim();
+      persist();
+    });
+  });
+  document.querySelectorAll('.move-up').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day, i = +e.currentTarget.dataset.item;
+      if(i>0){
+        const arr = days[d].items;
+        [arr[i-1], arr[i]] = [arr[i], arr[i-1]];
+        persist();
+        render();
+      }
+    });
+  });
+  document.querySelectorAll('.move-down').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day, i = +e.currentTarget.dataset.item;
+      const arr = days[d].items;
+      if(i<arr.length-1){
+        [arr[i+1], arr[i]] = [arr[i], arr[i+1]];
+        persist();
+        render();
+      }
+    });
+  });
+  document.querySelectorAll('.del').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.target.dataset.day, i = +e.target.dataset.item;
+      days[d].items.splice(i,1);
+      persist();
+      render();
+    });
+  });
+  document.querySelectorAll('.add-btn').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.target.dataset.day;
+      const row = e.target.closest('.add-row');
+      const timeIn = row.querySelector('.time-in');
+      const nameIn = row.querySelector('.name');
+      if(nameIn.value.trim()){
+        days[d].items.push({t: timeIn.value.trim() || '-', x: nameIn.value.trim()});
+        persist();
+        render();
+      }
+    });
+  });
+  document.querySelectorAll('.chip').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day;
+      const place = e.currentTarget.dataset.place;
+      days[d].items.push({t:'-', x: place});
+      persist();
+      render();
+    });
+  });
+}
+
+(async ()=>{
+  await loadPersisted();
+  render();
+  await loadTodos();
+  renderTodos();
+})();
+</script>
+</body>
+</html>
