@@ -630,10 +630,36 @@ const days = [
   }
 ];
 
+const suggestions = {
+  nature:[
+    {n:"팜 토미타", r:4.4},
+    {n:"파노라마 로드", r:4.4},
+    {n:"패치워크 로드", r:4.3},
+    {n:"나카후라노 호쿠세이야마 라벤더밭", r:4.3},
+    {n:"칸노팜", r:4.1}
+  ],
+  sapporo_food:[
+    {n:"스시동 (Sushi-Don)", r:4.7},
+    {n:"테시카가 라멘", r:4.6},
+    {n:"타케에스시 (니조시장)", r:4.6},
+    {n:"마루스시", r:4.6},
+    {n:"삿포로 시계탑", r:3.9},
+    {n:"삿포로 TV타워", r:4.1}
+  ],
+  tokyo:[
+    {n:"올데이플레이스 시부야 인근 산책", r:4.1},
+    {n:"오모테산도 우카이테이 (테판야끼)", r:4.6},
+    {n:"레스토랑 이엔느", r:4.5},
+    {n:"JULIA (미쉐린)", r:4.8}
+  ]
+};
+
 const timeline = document.getElementById('timeline');
 const saveEl = document.getElementById('save');
 let saveTimer;
 
+// Claude 아티팩트의 window.storage가 없는 환경(예: GitHub Pages)에서는
+// localStorage로 자동 대체되는 래퍼
 const storageAPI = {
   async get(key, shared=false){
     if(window.storage){ return window.storage.get(key, shared); }
@@ -840,6 +866,15 @@ function render(){
         persist();
         render();
       }
+    });
+  });
+  document.querySelectorAll('.chip').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day;
+      const place = e.currentTarget.dataset.place;
+      days[d].items.push({t:'-', x: place});
+      persist();
+      render();
     });
   });
 }
