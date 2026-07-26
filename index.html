@@ -196,6 +196,37 @@
   .chip:hover{filter:brightness(0.95);}
   .chip .r{opacity:0.6;font-size:11px;margin-left:4px;}
 
+  .day-todo{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);}
+  .day-todo-title{font-size:12px;font-weight:700;color:var(--indigo);margin-bottom:8px;}
+  .day-todo-list{list-style:none;margin:0;padding:0;}
+  .day-todo-list li{
+    display:flex;align-items:flex-start;gap:9px;
+    padding:6px 0;border-bottom:1px solid var(--line);
+  }
+  .day-todo-list li:last-child{border-bottom:none;}
+  .day-todo-list input[type=checkbox]{
+    margin-top:3px;width:15px;height:15px;accent-color:var(--indigo);cursor:pointer;flex-shrink:0;
+  }
+  .day-todo-list .dtxt{
+    flex:1;outline:none;font-size:13.5px;line-height:1.5;
+    border-radius:6px;padding:2px 6px;margin:-2px -6px;
+  }
+  .day-todo-list .dtxt:focus{background:#F5F3EA;}
+  .day-todo-list li.done .dtxt{color:var(--ink-soft);text-decoration:line-through;}
+  .day-todo-list .del{
+    border:none;background:none;color:#BDBAAE;cursor:pointer;font-size:14px;padding:0 4px;
+  }
+  .day-todo-list .del:hover{color:var(--coral);}
+  .day-todo-add{display:flex;gap:8px;margin-top:8px;}
+  .day-todo-add input[type=text]{
+    font-family:'Noto Sans KR',sans-serif;font-size:13px;flex:1;
+    border:1px solid var(--line);border-radius:6px;padding:6px 10px;
+  }
+  .day-todo-add button{
+    border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;
+    border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;
+  }
+
   .save{
     position:fixed;bottom:18px;right:24px;
     font-size:11px;color:var(--ink-soft);
@@ -504,7 +535,11 @@ const days = [
       {t:"오후", x:"핫플 동네 산책 (시부야/오모테산도)"},
       {t:"저녁", x:"도쿄 저녁 식사"}
     ],
-    suggestKey:"tokyo"
+    dayTodos:[
+      {t:"공항에서 유심/이심 활성화 확인", done:false},
+      {t:"짐 코인로커 위치 확인 (하네다)", done:false},
+      {t:"저녁 식당 예약/웨이팅 확인", done:false}
+    ]
   },
   {
     num:2, date:"8/24 (월)", loc:"도쿄 → 삿포로",
@@ -518,7 +553,12 @@ const days = [
       {t:"19:00~", x:"삿포로 시내 숙소(GRANBELL) 체크인"},
       {t:"저녁", x:"삿포로 저녁 식사 (스시/라멘)"}
     ],
-    suggestKey:"sapporo_food"
+    dayTodos:[
+      {t:"remm Roppongi 체크아웃 시간 프론트 확인", done:false},
+      {t:"오릭스렌터카 예약확인서 캡처본 지참", done:false},
+      {t:"국제운전면허증 + 한국 운전면허증 챙기기", done:false},
+      {t:"삿포로 숙소 체크인 시간 미리 문자/메일 안내", done:false}
+    ]
   },
   {
     num:3, date:"8/25 (화)", loc:"삿포로 → 후라노",
@@ -529,7 +569,11 @@ const days = [
       {t:"오후", x:"후라노 라벤더밭 투어 (팜 토미타 등)"},
       {t:"저녁", x:"FURANO HOTEL 체크인, 후라노 시내 저녁"}
     ],
-    suggestKey:"nature"
+    dayTodos:[
+      {t:"팜 토미타 개장시간·주차장 확인", done:false},
+      {t:"FURANO HOTEL 체크인 연락(늦을 경우 미리 연락)", done:false},
+      {t:"렌터카 주유 상태 확인", done:false}
+    ]
   },
   {
     num:4, date:"8/26 (수)", loc:"후라노 → 비에이(시라히게온천)",
@@ -540,7 +584,11 @@ const days = [
       {t:"오후", x:"시라히게 폭포 등 비에이 관광"},
       {t:"15:00", x:"Aonobi Yuyu 체크인 (온천 숙소)"}
     ],
-    suggestKey:"nature"
+    dayTodos:[
+      {t:"비에이 패치워크로드·파노라마로드 경로 확인", done:false},
+      {t:"Aonobi Yuyu 조식/석식 시간 확인", done:false},
+      {t:"온천 이용 매너(문신 관련) 재확인", done:false}
+    ]
   },
   {
     num:5, date:"8/27 (목)", loc:"비에이 → 다이세츠잔(아사히다케)",
@@ -555,7 +603,12 @@ const days = [
       {t:"오후", x:"아사히다케온천 마을 도착, 여유시간"},
       {t:"15:00", x:"Hotel La Vista Daisetsuzan 체크인, 저녁"}
     ],
-    suggestKey:"nature"
+    dayTodos:[
+      {t:"아사히다케 로프웨이 운행시간 아침에 재확인", done:false},
+      {t:"등산화·방풍/방한 겉옷 착용 확인", done:false},
+      {t:"물/간식 챙기기", done:false},
+      {t:"곰 방울 소지 확인", done:false}
+    ]
   },
   {
     num:6, date:"8/28 (금)", loc:"아사히다케 → 신치토세 → 도쿄 → 서울",
@@ -569,40 +622,18 @@ const days = [
       {t:"오전~오후", x:"아사히다케온천 → 신치토세공항 이동 (약 2.5~3시간)"},
       {t:"19:05~20:05", x:"하네다 환승 대기 (약 1시간)"}
     ],
-    suggestKey:"none"
+    dayTodos:[
+      {t:"렌터카 반납 시간(18:00) 여유있게 출발했는지 확인", done:false},
+      {t:"ANA 귀국편 온라인 체크인 완료 확인", done:false},
+      {t:"기념품/면세품 최종 확인", done:false}
+    ]
   }
 ];
-
-const suggestions = {
-  nature:[
-    {n:"팜 토미타", r:4.4},
-    {n:"파노라마 로드", r:4.4},
-    {n:"패치워크 로드", r:4.3},
-    {n:"나카후라노 호쿠세이야마 라벤더밭", r:4.3},
-    {n:"칸노팜", r:4.1}
-  ],
-  sapporo_food:[
-    {n:"스시동 (Sushi-Don)", r:4.7},
-    {n:"테시카가 라멘", r:4.6},
-    {n:"타케에스시 (니조시장)", r:4.6},
-    {n:"마루스시", r:4.6},
-    {n:"삿포로 시계탑", r:3.9},
-    {n:"삿포로 TV타워", r:4.1}
-  ],
-  tokyo:[
-    {n:"올데이플레이스 시부야 인근 산책", r:4.1},
-    {n:"오모테산도 우카이테이 (테판야끼)", r:4.6},
-    {n:"레스토랑 이엔느", r:4.5},
-    {n:"JULIA (미쉐린)", r:4.8}
-  ]
-};
 
 const timeline = document.getElementById('timeline');
 const saveEl = document.getElementById('save');
 let saveTimer;
 
-// Claude 아티팩트의 window.storage가 없는 환경(예: GitHub Pages)에서는
-// localStorage로 자동 대체되는 래퍼
 const storageAPI = {
   async get(key, shared=false){
     if(window.storage){ return window.storage.get(key, shared); }
@@ -626,7 +657,7 @@ function flashSave(){
   saveTimer = setTimeout(()=>saveEl.classList.remove('show'),1200);
 }
 
-const ITINERARY_VERSION = 2;
+const ITINERARY_VERSION = 3;
 
 async function persist(){
   try{
@@ -641,7 +672,10 @@ async function loadPersisted(){
     if(res && res.value){
       const parsed = JSON.parse(res.value);
       if(parsed && parsed.version === ITINERARY_VERSION && Array.isArray(parsed.days) && parsed.days.length === days.length){
-        parsed.days.forEach((d,i)=>{ days[i].items = d.items; });
+        parsed.days.forEach((d,i)=>{
+          days[i].items = d.items;
+          if(Array.isArray(d.dayTodos)) days[i].dayTodos = d.dayTodos;
+        });
       }
     }
   }catch(e){ /* no saved data yet */ }
@@ -681,16 +715,14 @@ function render(){
       </li>`;
     });
 
-    let chipsHtml = '';
-    const sk = day.suggestKey;
-    if(sk && sk !== 'none' && suggestions[sk]){
-      chipsHtml = `<div class="suggest-title">추천 장소 (클릭해서 추가)</div><div class="chips">`;
-      suggestions[sk].forEach(s=>{
-        const isFood = sk.indexOf('food')>=0;
-        chipsHtml += `<button class="chip ${isFood?'food':''}" data-day="${di}" data-place="${s.n}">${s.n}<span class="r">★${s.r}</span></button>`;
-      });
-      chipsHtml += `</div>`;
-    }
+    let dayTodoHtml = '';
+    (day.dayTodos || []).forEach((dt, ti)=>{
+      dayTodoHtml += `<li class="${dt.done?'done':''}">
+        <input type="checkbox" data-day="${di}" data-tidx="${ti}" ${dt.done?'checked':''}>
+        <span class="dtxt" contenteditable="true" data-day="${di}" data-tidx="${ti}">${dt.t}</span>
+        <button class="del-dt" data-day="${di}" data-tidx="${ti}" aria-label="삭제">✕</button>
+      </li>`;
+    });
 
     el.innerHTML = `
       <div class="day-head"><h2>Day ${day.num} · ${day.date}</h2><span class="loc">${day.loc}</span></div>
@@ -704,7 +736,14 @@ function render(){
           <input type="text" class="name" placeholder="일정 추가..." data-day="${di}">
           <button data-day="${di}" class="add-btn">추가</button>
         </div>
-        ${chipsHtml}
+        <div class="day-todo">
+          <div class="day-todo-title">📌 이 날 해야 할 일</div>
+          <ul class="day-todo-list">${dayTodoHtml}</ul>
+          <div class="day-todo-add">
+            <input type="text" class="dt-new-input" placeholder="할 일 추가..." data-day="${di}">
+            <button class="dt-add-btn" data-day="${di}">추가</button>
+          </div>
+        </div>
       </div>
     `;
     timeline.appendChild(el);
@@ -724,6 +763,42 @@ function render(){
       persist();
     });
   });
+  document.querySelectorAll('.day-todo-list input[type=checkbox]').forEach(el=>{
+    el.addEventListener('change', e=>{
+      const d = +e.target.dataset.day, ti = +e.target.dataset.tidx;
+      days[d].dayTodos[ti].done = e.target.checked;
+      persist();
+      render();
+    });
+  });
+  document.querySelectorAll('.dtxt').forEach(el=>{
+    el.addEventListener('blur', e=>{
+      const d = +e.target.dataset.day, ti = +e.target.dataset.tidx;
+      days[d].dayTodos[ti].t = e.target.textContent.trim();
+      persist();
+    });
+  });
+  document.querySelectorAll('.del-dt').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day, ti = +e.currentTarget.dataset.tidx;
+      days[d].dayTodos.splice(ti,1);
+      persist();
+      render();
+    });
+  });
+  document.querySelectorAll('.dt-add-btn').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day;
+      const input = document.querySelector(`.dt-new-input[data-day="${d}"]`);
+      if(input.value.trim()){
+        if(!days[d].dayTodos) days[d].dayTodos = [];
+        days[d].dayTodos.push({t: input.value.trim(), done:false});
+        persist();
+        render();
+      }
+    });
+  });
+
   document.querySelectorAll('.move-up').forEach(el=>{
     el.addEventListener('click', e=>{
       const d = +e.currentTarget.dataset.day, i = +e.currentTarget.dataset.item;
@@ -765,15 +840,6 @@ function render(){
         persist();
         render();
       }
-    });
-  });
-  document.querySelectorAll('.chip').forEach(el=>{
-    el.addEventListener('click', e=>{
-      const d = +e.currentTarget.dataset.day;
-      const place = e.currentTarget.dataset.place;
-      days[d].items.push({t:'-', x: place});
-      persist();
-      render();
     });
   });
 }
