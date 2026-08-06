@@ -127,6 +127,9 @@
     margin-top:1px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
+  .day-date, .day-loc{outline:none;border-radius:4px;padding:0 2px;margin:0 -2px;}
+  .day-date:focus, .day-loc:focus{background:#F5F3EA;color:var(--ink);}
+  .day-loc:focus{white-space:normal;text-overflow:clip;}
   .day-head .chevron{
     flex:0 0 auto;font-size:13px;color:var(--ink-soft);
     transition:transform .2s;
@@ -184,18 +187,18 @@
   .list{list-style:none;margin:0;padding:0;}
   .list li.item-row{
     position:relative;
-    padding:6px 0;border-bottom:1px solid var(--line);
+    padding:5px 0;border-bottom:1px solid var(--line);
   }
   .list li.item-row:last-child{border-bottom:none;}
   .item-main{display:flex;align-items:center;gap:6px;}
   .list .t{
-    font-family:'JetBrains Mono',monospace;font-size:12px;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;
     color:var(--ink-soft);min-width:42px;max-width:60px;flex-shrink:0;
     outline:none;border-radius:6px;padding:4px;
   }
   .list .t:focus{background:#F5F3EA;color:var(--ink);}
   .list .txt{
-    flex:1;min-width:0;outline:none;font-size:14.5px;line-height:1.5;
+    flex:1;min-width:0;outline:none;font-family:'Noto Sans KR',sans-serif;font-size:13.5px;line-height:1.3;
     border-radius:6px;padding:4px 6px;margin:0 -6px;
   }
   .list .txt:focus{background:#F5F3EA;}
@@ -234,7 +237,7 @@
 
   .add-row{display:flex;gap:6px;margin-top:8px;}
   .add-row input[type=text]{
-    font-family:'JetBrains Mono',monospace;font-size:12.5px;width:56px;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;width:56px;
     border:1px solid var(--line);border-radius:7px;padding:7px 6px;
   }
   .add-row input[type=text].name{
@@ -246,18 +249,23 @@
   }
 
   .day-todo{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
-  .day-todo-title{font-size:11.5px;font-weight:700;color:var(--indigo);margin-bottom:4px;}
+  .day-todo-title{
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:11px;font-weight:700;color:var(--indigo);
+    text-transform:uppercase;letter-spacing:0.4px;
+    margin-bottom:4px;
+  }
   .day-todo-list{list-style:none;margin:0;padding:0;}
   .day-todo-list li{
     display:flex;align-items:flex-start;gap:8px;
-    padding:5px 0;border-bottom:1px solid var(--line);
+    padding:4px 0;border-bottom:1px solid var(--line);
   }
   .day-todo-list li:last-child{border-bottom:none;}
   .day-todo-list input[type=checkbox]{
     margin-top:2px;width:17px;height:17px;accent-color:var(--indigo);flex-shrink:0;
   }
   .day-todo-list .dtxt{
-    flex:1;outline:none;font-size:13px;line-height:1.4;
+    flex:1;outline:none;font-family:'Noto Sans KR',sans-serif;font-size:13.5px;line-height:1.3;
     border-radius:6px;padding:2px 6px;margin:-2px -6px;
   }
   .day-todo-list .dtxt:focus{background:#F5F3EA;}
@@ -286,7 +294,7 @@
   .todo-section{margin-bottom:14px;}
   .todo-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;user-select:none;}
   .todo-head .left{display:flex;align-items:center;gap:6px;}
-  .todo-head h2{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;margin:0;}
+  .todo-head h2{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;margin:0;}
   .todo-chevron{
     display:inline-flex;align-items:center;justify-content:center;
     width:18px;height:18px;color:var(--ink-soft);
@@ -299,19 +307,20 @@
   .todo-cat-head{margin:10px 0 4px;}
   .todo-cat-head:first-child{margin-top:0;}
   .todo-cat{
-    font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:11px;font-weight:700;color:var(--indigo);text-transform:uppercase;letter-spacing:0.4px;
   }
   .todo-list{list-style:none;margin:0;padding:0;}
   .todo-list li{
     display:flex;align-items:flex-start;gap:8px;
-    padding:6px 0;border-bottom:1px solid var(--line);
+    padding:5px 0;border-bottom:1px solid var(--line);
   }
   .todo-list li:last-child{border-bottom:none;}
   .todo-list input[type=checkbox]{
     margin-top:2px;width:17px;height:17px;accent-color:var(--indigo);flex-shrink:0;
   }
   .todo-list .txt2{
-    flex:1;outline:none;font-size:13px;line-height:1.4;
+    flex:1;outline:none;font-family:'Noto Sans KR',sans-serif;font-size:13.5px;line-height:1.3;
     border-radius:6px;padding:2px 6px;margin:-2px -6px;
   }
   .todo-list .txt2:focus{background:#F5F3EA;}
@@ -338,14 +347,7 @@
 <body>
 <div class="wrap">
 
-  <div class="quicknav">
-    <a href="#day-1">Day1 도쿄</a>
-    <a href="#day-2">Day2 삿포로</a>
-    <a href="#day-3">Day3 후라노</a>
-    <a href="#day-4">Day4 비에이</a>
-    <a href="#day-5">Day5 다이세츠잔</a>
-    <a href="#day-6">Day6 귀국</a>
-  </div>
+  <div class="quicknav" id="quicknav"></div>
 
   <div class="hero">
     <h1>도쿄 · 홋카이도 여행</h1>
@@ -400,7 +402,7 @@ try {
     db = firebase.firestore();
   }
 } catch(e){ console.error('Firebase init failed, falling back to local storage', e); }
-let todoCategories = ["서류/신분", "렌터카", "통신/결제", "다이세츠잔 등산", "숙소/매너", "짐/기타"];
+let todoCategories = ["서류/신분", "교통/렌터카", "통신/결제", "다이세츠잔 등산", "숙소/매너", "짐/기타"];
 let todoCollapsed = true;
 
 let todos = [
@@ -408,10 +410,10 @@ let todos = [
   {cat:"서류/신분", t:"국제운전면허증 발급 (경찰서/운전면허시험장, 여권+사진)", done:false},
   {cat:"서류/신분", t:"Visit Japan Web 사전 등록 (입국심사/세관 QR)", done:false},
   {cat:"서류/신분", t:"ANA 온라인 체크인 (출발 24시간 전, 여권정보/좌석)", done:false},
-  {cat:"렌터카", t:"국제운전면허증 + 한국 운전면허증 원본 둘 다 지참", done:false},
-  {cat:"렌터카", t:"오릭스렌터카 예약 확인서(예약번호 101838062) 캡처/출력", done:false},
-  {cat:"렌터카", t:"내비게이션 한국어 설정 가능 여부 확인", done:false},
-  {cat:"렌터카", t:"홋카이도 겨울/우천 대비 타이어 옵션 확인 (8월은 일반 타이어)", done:false},
+  {cat:"교통/렌터카", t:"국제운전면허증 + 한국 운전면허증 원본 둘 다 지참", done:false},
+  {cat:"교통/렌터카", t:"오릭스렌터카 예약 확인서(예약번호 101838062) 캡처/출력", done:false},
+  {cat:"교통/렌터카", t:"내비게이션 한국어 설정 가능 여부 확인", done:false},
+  {cat:"교통/렌터카", t:"홋카이도 겨울/우천 대비 타이어 옵션 확인 (8월은 일반 타이어)", done:false},
   {cat:"통신/결제", t:"eSIM 또는 포켓와이파이 예약", done:false},
   {cat:"통신/결제", t:"엔화 환전 또는 트래블카드 준비", done:false},
   {cat:"통신/결제", t:"해외여행자보험 가입", done:false},
@@ -443,6 +445,7 @@ async function persistTodos(){
 async function loadTodos(){
   const defaultCategories = todoCategories.slice();
   const defaultTodos = todos.slice();
+  const categoryRenames = { "렌터카": "교통/렌터카" };
   try{
     const res = await storageAPI.get('itinerary_todos', false);
     if(res && res.value){
@@ -451,10 +454,21 @@ async function loadTodos(){
         todos = parsed.items;
         todoCategories = parsed.categories;
         todoCollapsed = !!parsed.collapsed;
+
+        // 예전 카테고리 이름을 새 이름으로 합침 (중복 방지)
+        Object.entries(categoryRenames).forEach(([oldName, newName])=>{
+          if(todoCategories.includes(oldName)){
+            todos.forEach(t=>{ if(t.cat === oldName) t.cat = newName; });
+            todoCategories = todoCategories.filter(c=>c !== oldName);
+            if(!todoCategories.includes(newName)) todoCategories.push(newName);
+          }
+        });
+
         defaultCategories.forEach(c=>{ if(!todoCategories.includes(c)) todoCategories.push(c); });
         defaultTodos.forEach(dt=>{
           if(!todos.some(t=> t.t === dt.t)) todos.push(dt);
         });
+        persistTodos();
       }
     }
   }catch(e){ /* no saved todos yet, use defaults */ }
@@ -753,10 +767,25 @@ async function loadPersisted(){
         parsed.days.forEach((d,i)=>{
           days[i].items = d.items;
           if(Array.isArray(d.dayTodos)) days[i].dayTodos = d.dayTodos;
+          if(typeof d.date === 'string') days[i].date = d.date;
+          if(typeof d.loc === 'string') days[i].loc = d.loc;
         });
       }
     }
   }catch(e){ /* no saved data yet */ }
+}
+
+function renderQuicknav(){
+  const nav = document.getElementById('quicknav');
+  nav.innerHTML = days.map(day =>
+    `<a href="#day-${day.num}" data-day="${day.num}">Day${day.num} ${day.loc.split(/[·→]/)[0].trim()}</a>`
+  ).join('');
+  nav.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const targetEl = document.querySelector(a.getAttribute('href'));
+      if(targetEl) targetEl.classList.remove('collapsed');
+    });
+  });
 }
 
 function render(){
@@ -816,8 +845,8 @@ function render(){
       <div class="day-head" data-toggle="${di}">
         <span class="num-badge">${day.num}</span>
         <div class="titles">
-          <h2>Day ${day.num} · ${day.date}</h2>
-          <div class="loc">${day.loc}</div>
+          <h2>Day ${day.num} · <span class="day-date" contenteditable="true" data-day="${di}">${day.date}</span></h2>
+          <div class="loc day-loc" contenteditable="true" data-day="${di}">${day.loc}</div>
         </div>
         <span class="chevron">▾</span>
       </div>
@@ -846,14 +875,27 @@ function render(){
 
   document.querySelectorAll('.day-head').forEach(el=>{
     el.addEventListener('click', e=>{
+      if(e.target.closest('.day-date') || e.target.closest('.day-loc')) return;
       el.closest('.day').classList.toggle('collapsed');
     });
   });
 
-  document.querySelectorAll('.quicknav a').forEach(a=>{
-    a.addEventListener('click', e=>{
-      const targetEl = document.querySelector(a.getAttribute('href'));
-      if(targetEl) targetEl.classList.remove('collapsed');
+  document.querySelectorAll('.day-date').forEach(el=>{
+    el.addEventListener('click', e=>{ e.stopPropagation(); });
+    el.addEventListener('blur', e=>{
+      const d = +e.target.dataset.day;
+      days[d].date = e.target.textContent.trim();
+      persist();
+      renderQuicknav();
+    });
+  });
+  document.querySelectorAll('.day-loc').forEach(el=>{
+    el.addEventListener('click', e=>{ e.stopPropagation(); });
+    el.addEventListener('blur', e=>{
+      const d = +e.target.dataset.day;
+      days[d].loc = e.target.textContent.trim();
+      persist();
+      renderQuicknav();
     });
   });
 
@@ -1016,10 +1058,8 @@ function render(){
 
 function setupRealtimeSync(){
   if(!db) return;
-  let ignoreNextDays = false;
-  let ignoreNextTodos = false;
 
-  onSnapshot(doc(db, 'trip', 'itinerary_days'), (snap)=>{
+  db.collection('trip').doc('itinerary_days').onSnapshot((snap)=>{
     if(!snap.exists) return;
     try{
       const parsed = JSON.parse(snap.data().value);
@@ -1029,14 +1069,17 @@ function setupRealtimeSync(){
         parsed.days.forEach((d,i)=>{
           days[i].items = d.items;
           if(Array.isArray(d.dayTodos)) days[i].dayTodos = d.dayTodos;
+          if(typeof d.date === 'string') days[i].date = d.date;
+          if(typeof d.loc === 'string') days[i].loc = d.loc;
         });
         render();
+        renderQuicknav();
       }
     }catch(e){ /* ignore malformed remote data */ }
   });
 
-  onSnapshot(doc(db, 'trip', 'itinerary_todos'), (snap)=>{
-    if(!snap.exists()) return;
+  db.collection('trip').doc('itinerary_todos').onSnapshot((snap)=>{
+    if(!snap.exists) return;
     try{
       const parsed = JSON.parse(snap.data().value);
       if(parsed && Array.isArray(parsed.items) && Array.isArray(parsed.categories)){
@@ -1056,6 +1099,7 @@ document.addEventListener('click', ()=>{
 (async ()=>{
   await loadPersisted();
   render();
+  renderQuicknav();
   await loadTodos();
   renderTodos();
   setupRealtimeSync();
