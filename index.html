@@ -35,8 +35,8 @@
 
   .quicknav{
     position:sticky;top:0;z-index:20;
-    display:flex;gap:6px;overflow-x:auto;
-    padding:10px 14px;margin:0 -14px 14px;
+    display:flex;gap:5px;overflow-x:auto;
+    padding:7px 14px;margin:0 -14px 10px;
     background:var(--paper);
     border-bottom:1px solid var(--line);
     -webkit-overflow-scrolling:touch;
@@ -46,89 +46,89 @@
   .quicknav a{
     flex:0 0 auto;
     font-family:'JetBrains Mono',monospace;
-    font-size:12px;font-weight:700;
+    font-size:11px;font-weight:700;
     background:var(--card);border:1px solid var(--line);
     color:var(--indigo);
-    padding:8px 12px;border-radius:20px;
+    padding:6px 10px;border-radius:20px;
     text-decoration:none;white-space:nowrap;
   }
 
   .hero{
     background:var(--indigo);
     color:#F4F2EA;
-    border-radius:16px;
-    padding:20px 18px;
-    margin-bottom:16px;
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:10px;
     position:relative;
     overflow:hidden;
   }
   .hero h1{
     font-family:'Noto Serif KR',serif;
     font-weight:700;
-    font-size:21px;
-    margin:0 0 6px;
+    font-size:18px;
+    margin:0 0 4px;
   }
-  .hero .sub{font-size:13px;color:#C7CBE0;margin:0 0 14px;}
+  .hero .sub{font-size:12px;color:#C7CBE0;margin:0 0 9px;}
   .hero .route{
     font-family:'JetBrains Mono',monospace;
-    font-size:12px;
+    font-size:11px;
     letter-spacing:0.3px;
     color:#F4F2EA;
-    display:flex;flex-wrap:wrap;gap:5px;align-items:center;
+    display:flex;flex-wrap:wrap;gap:4px;align-items:center;
   }
   .hero .route span.stop{
     background:rgba(255,255,255,0.1);
-    padding:4px 9px;border-radius:20px;
+    padding:3px 8px;border-radius:20px;
   }
   .hero .route span.arrow{color:var(--gold);}
 
   .car-note{
-    display:flex;gap:9px;align-items:flex-start;
+    display:flex;gap:8px;align-items:flex-start;
     background:var(--lavender-bg);
     border:1px solid #DAD3EE;
-    border-radius:12px;
-    padding:12px 14px;
-    font-size:13px;
-    line-height:1.5;
+    border-radius:10px;
+    padding:9px 12px;
+    font-size:12px;
+    line-height:1.45;
     color:#4A3F72;
-    margin-bottom:20px;
+    margin-bottom:12px;
   }
 
   .timeline{position:relative;padding-left:0;}
 
   .day{
-    position:relative;margin-bottom:12px;
+    position:relative;margin-bottom:8px;
     background:var(--card);
     border:1px solid var(--line);
-    border-radius:14px;
+    border-radius:12px;
     overflow:hidden;
-    scroll-margin-top:56px;
+    scroll-margin-top:52px;
   }
   .day-head{
-    display:flex;align-items:center;gap:10px;flex-wrap:nowrap;
-    padding:14px 16px;
+    display:flex;align-items:center;gap:8px;flex-wrap:nowrap;
+    padding:10px 14px;
     cursor:pointer;user-select:none;
-    min-height:44px;
+    min-height:40px;
   }
   .day-head .num-badge{
     flex:0 0 auto;
-    width:26px;height:26px;border-radius:50%;
+    width:22px;height:22px;border-radius:50%;
     background:var(--gold);color:#22262F;
-    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
     display:flex;align-items:center;justify-content:center;
   }
   .day-head .titles{flex:1;min-width:0;}
   .day-head h2{
     font-family:'Noto Serif KR',serif;
-    font-size:15.5px;font-weight:700;margin:0;
+    font-size:14px;font-weight:700;margin:0;
   }
   .day-head .loc{
-    font-size:12px;color:var(--ink-soft);
-    margin-top:2px;
+    font-size:11px;color:var(--ink-soft);
+    margin-top:1px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
   .day-head .chevron{
-    flex:0 0 auto;font-size:14px;color:var(--ink-soft);
+    flex:0 0 auto;font-size:13px;color:var(--ink-soft);
     transition:transform .2s;
   }
   .day.collapsed .day-head .chevron{transform:rotate(-90deg);}
@@ -138,52 +138,53 @@
     border:none;
     border-top:1px solid var(--line);
     border-radius:0;
-    padding:14px 16px 18px;
+    padding:10px 14px 12px;
   }
   .day.collapsed .card{display:none;}
 
   .flight{
-    display:flex;align-items:center;gap:14px;
+    display:flex;align-items:center;gap:10px;
     font-family:'JetBrains Mono',monospace;
-    font-size:12.5px;
+    font-size:11.5px;
     background:#F4F1E6;
     border:1px solid #E6E1CE;
-    border-radius:10px;
-    padding:10px 14px;
-    margin-bottom:10px;
+    border-radius:8px;
+    padding:7px 10px;
+    margin-bottom:6px;
     color:#5A4E1F;
   }
   .flight .badge{
     background:var(--gold);color:#2C2308;
-    padding:2px 8px;border-radius:6px;font-weight:700;
+    padding:1px 6px;border-radius:5px;font-weight:700;
   }
   .flight .path{flex:1;color:#3A3120;}
   .flight .time{font-weight:700;color:#22262F;}
 
   .hotel-block, .car-block{
-    display:flex;gap:10px;align-items:flex-start;
-    border-radius:10px;padding:10px 14px;margin-bottom:10px;
-    font-size:12.5px;
+    display:flex;gap:8px;align-items:center;
+    border-radius:8px;padding:7px 10px;margin-bottom:6px;
+    font-size:11.5px;
   }
   .hotel-block{background:var(--lavender-bg);border:1px solid #DAD3EE;}
   .car-block{background:#EAF3E4;border:1px solid #CFE5C3;}
   .hotel-block .tag, .car-block .tag{
     font-family:'JetBrains Mono',monospace;font-weight:700;
-    padding:2px 8px;border-radius:6px;white-space:nowrap;
+    padding:1px 6px;border-radius:5px;white-space:nowrap;
   }
   .hotel-block .tag{background:var(--lavender);color:#fff;}
   .car-block .tag{background:#4E7A3A;color:#fff;}
-  .hotel-block .info b, .car-block .info b{display:block;font-size:13px;color:#22262F;}
-  .hotel-block .info span, .car-block .info span{color:#5A5470;}
+  .hotel-block .info, .car-block .info{min-width:0;flex:1;}
+  .hotel-block .info b, .car-block .info b{display:block;font-size:12px;color:#22262F;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .hotel-block .info span, .car-block .info span{color:#5A5470;font-size:11px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .item-map-link{
-    flex-shrink:0;font-size:16px;text-decoration:none;
-    padding:4px 7px;border-radius:6px;align-self:center;
+    flex-shrink:0;font-size:15px;text-decoration:none;
+    padding:2px 5px;border-radius:6px;align-self:center;
   }
 
   .list{list-style:none;margin:0;padding:0;}
   .list li.item-row{
     position:relative;
-    padding:9px 0;border-bottom:1px solid var(--line);
+    padding:6px 0;border-bottom:1px solid var(--line);
   }
   .list li.item-row:last-child{border-bottom:none;}
   .item-main{display:flex;align-items:center;gap:6px;}
@@ -231,47 +232,47 @@
   }
   .item-link-row .link-input:focus{background:#F5F3EA;border-style:solid;}
 
-  .add-row{display:flex;gap:8px;margin-top:12px;}
+  .add-row{display:flex;gap:6px;margin-top:8px;}
   .add-row input[type=text]{
-    font-family:'JetBrains Mono',monospace;font-size:13px;width:64px;
-    border:1px solid var(--line);border-radius:8px;padding:9px 8px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;width:56px;
+    border:1px solid var(--line);border-radius:7px;padding:7px 6px;
   }
   .add-row input[type=text].name{
-    font-family:'Noto Sans KR',sans-serif;font-size:14px;flex:1;width:auto;
+    font-family:'Noto Sans KR',sans-serif;font-size:13.5px;flex:1;width:auto;
   }
   .add-row button{
     border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;
-    border-radius:8px;padding:9px 16px;font-size:13px;min-height:40px;
+    border-radius:7px;padding:7px 14px;font-size:12.5px;min-height:36px;
   }
 
-  .day-todo{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);}
-  .day-todo-title{font-size:12.5px;font-weight:700;color:var(--indigo);margin-bottom:8px;}
+  .day-todo{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+  .day-todo-title{font-size:11.5px;font-weight:700;color:var(--indigo);margin-bottom:4px;}
   .day-todo-list{list-style:none;margin:0;padding:0;}
   .day-todo-list li{
-    display:flex;align-items:flex-start;gap:9px;
-    padding:8px 0;border-bottom:1px solid var(--line);
+    display:flex;align-items:flex-start;gap:8px;
+    padding:5px 0;border-bottom:1px solid var(--line);
   }
   .day-todo-list li:last-child{border-bottom:none;}
   .day-todo-list input[type=checkbox]{
-    margin-top:2px;width:19px;height:19px;accent-color:var(--indigo);flex-shrink:0;
+    margin-top:2px;width:17px;height:17px;accent-color:var(--indigo);flex-shrink:0;
   }
   .day-todo-list .dtxt{
-    flex:1;outline:none;font-size:14px;line-height:1.5;
-    border-radius:6px;padding:3px 6px;margin:-3px -6px;
+    flex:1;outline:none;font-size:13px;line-height:1.4;
+    border-radius:6px;padding:2px 6px;margin:-2px -6px;
   }
   .day-todo-list .dtxt:focus{background:#F5F3EA;}
   .day-todo-list li.done .dtxt{color:var(--ink-soft);text-decoration:line-through;}
   .day-todo-list .del{
-    border:none;background:none;color:#BDBAAE;font-size:16px;padding:4px 8px;min-width:32px;
+    border:none;background:none;color:#BDBAAE;font-size:15px;padding:2px 6px;min-width:28px;
   }
-  .day-todo-add{display:flex;gap:8px;margin-top:10px;}
+  .day-todo-add{display:flex;gap:6px;margin-top:6px;}
   .day-todo-add input[type=text]{
-    font-family:'Noto Sans KR',sans-serif;font-size:14px;flex:1;
-    border:1px solid var(--line);border-radius:8px;padding:9px 10px;
+    font-family:'Noto Sans KR',sans-serif;font-size:13.5px;flex:1;
+    border:1px solid var(--line);border-radius:7px;padding:7px 9px;
   }
   .day-todo-add button{
     border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;
-    border-radius:8px;padding:9px 16px;font-size:13px;min-height:40px;
+    border-radius:7px;padding:7px 14px;font-size:12.5px;min-height:36px;
   }
 
   .save{
@@ -282,52 +283,43 @@
   }
   .save.show{opacity:1;}
 
-  .todo-section{margin-bottom:32px;}
-  .todo-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;cursor:pointer;user-select:none;}
-  .todo-head .left{display:flex;align-items:center;gap:8px;}
-  .todo-head h2{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;margin:0;}
+  .todo-section{margin-bottom:14px;}
+  .todo-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;user-select:none;}
+  .todo-head .left{display:flex;align-items:center;gap:6px;}
+  .todo-head h2{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;margin:0;}
   .todo-chevron{
     display:inline-flex;align-items:center;justify-content:center;
-    width:20px;height:20px;color:var(--ink-soft);
-    transition:transform .2s;font-size:12px;
+    width:18px;height:18px;color:var(--ink-soft);
+    transition:transform .2s;font-size:11px;
   }
   .todo-chevron.collapsed{transform:rotate(-90deg);}
-  .todo-progress{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
-  .todo-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;}
+  .todo-progress{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);}
+  .todo-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;}
   .todo-card.collapsed{display:none;}
-  .todo-cat-head{
-    display:flex;align-items:center;justify-content:space-between;
-    margin:14px 0 6px;gap:8px;
-  }
+  .todo-cat-head{margin:10px 0 4px;}
   .todo-cat-head:first-child{margin-top:0;}
   .todo-cat{
-    font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;
-    outline:none;border-radius:4px;padding:2px 4px;margin:-2px -4px;flex:1;
+    font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;
   }
-  .todo-cat:focus{background:#F8F3E4;}
-  .todo-cat-del{
-    border:none;background:none;color:#D8D4C4;cursor:pointer;font-size:12px;padding:0 4px;
-  }
-  .todo-cat-del:hover{color:var(--coral);}
   .todo-list{list-style:none;margin:0;padding:0;}
   .todo-list li{
-    display:flex;align-items:flex-start;gap:10px;
-    padding:9px 0;border-bottom:1px solid var(--line);
+    display:flex;align-items:flex-start;gap:8px;
+    padding:6px 0;border-bottom:1px solid var(--line);
   }
   .todo-list li:last-child{border-bottom:none;}
   .todo-list input[type=checkbox]{
-    margin-top:2px;width:19px;height:19px;accent-color:var(--indigo);flex-shrink:0;
+    margin-top:2px;width:17px;height:17px;accent-color:var(--indigo);flex-shrink:0;
   }
   .todo-list .txt2{
-    flex:1;outline:none;font-size:14px;line-height:1.5;
-    border-radius:6px;padding:3px 6px;margin:-3px -6px;
+    flex:1;outline:none;font-size:13px;line-height:1.4;
+    border-radius:6px;padding:2px 6px;margin:-2px -6px;
   }
   .todo-list .txt2:focus{background:#F5F3EA;}
   .todo-list li.done .txt2{color:var(--ink-soft);text-decoration:line-through;}
   .todo-list .del{
-    border:none;background:none;color:#BDBAAE;font-size:16px;padding:4px 8px;min-width:32px;
+    border:none;background:none;color:#BDBAAE;font-size:15px;padding:2px 6px;min-width:28px;
   }
-  .todo-add-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .todo-add-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);}
   .todo-add-row select{
     font-family:'Noto Sans KR',sans-serif;font-size:13px;
     border:1px solid var(--line);border-radius:8px;padding:8px;
@@ -340,15 +332,6 @@
   .todo-add-row button{
     border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;
     border-radius:8px;padding:9px 16px;font-size:13px;min-height:40px;
-  }
-  .todo-add-cat-row{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);}
-  .todo-add-cat-row input[type=text]{
-    font-family:'Noto Sans KR',sans-serif;font-size:14px;flex:1;
-    border:1px solid var(--line);border-radius:8px;padding:9px 10px;
-  }
-  .todo-add-cat-row button{
-    border:1px solid var(--lavender);background:var(--lavender-bg);color:#4A3F72;
-    border-radius:8px;padding:9px 14px;font-size:12.5px;min-height:40px;
   }
 </style>
 </head>
@@ -397,10 +380,9 @@
 
 <div class="save" id="save">저장됨</div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyCUoBRuV3QmU1frb-lturycjvmljKKNWAA",
   authDomain: "tokyo-hokkaido-trip.firebaseapp.com",
@@ -413,11 +395,13 @@ const firebaseConfig = {
 
 let db = null;
 try {
-  const fbApp = initializeApp(firebaseConfig);
-  db = getFirestore(fbApp);
+  if (typeof firebase !== 'undefined') {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+  }
 } catch(e){ console.error('Firebase init failed, falling back to local storage', e); }
 let todoCategories = ["서류/신분", "렌터카", "통신/결제", "다이세츠잔 등산", "숙소/매너", "짐/기타"];
-let todoCollapsed = false;
+let todoCollapsed = true;
 
 let todos = [
   {cat:"서류/신분", t:"여권 유효기간 확인 (입국일 기준 6개월 이상)", done:false},
@@ -493,12 +477,10 @@ function renderTodos(){
   applyCollapsedState();
 
   let html = '';
-  todoCategories.forEach((cat, ci)=>{
+  todoCategories.forEach((cat)=>{
     const items = todos.map((x,i)=>({...x,idx:i})).filter(x=>x.cat===cat);
-    html += `<div class="todo-cat-head">
-      <span class="todo-cat" contenteditable="true" data-cat-idx="${ci}">${cat}</span>
-      <button class="todo-cat-del" data-cat-idx="${ci}" aria-label="카테고리 삭제">카테고리 삭제 ✕</button>
-    </div><ul class="todo-list">`;
+    if(!items.length) return;
+    html += `<div class="todo-cat-head"><span class="todo-cat">${cat}</span></div><ul class="todo-list">`;
     items.forEach(it=>{
       html += `<li class="${it.done?'done':''}">
         <input type="checkbox" data-idx="${it.idx}" ${it.done?'checked':''}>
@@ -506,9 +488,6 @@ function renderTodos(){
         <button class="del" data-idx="${it.idx}" aria-label="삭제">✕</button>
       </li>`;
     });
-    if(!items.length){
-      html += `<li style="color:var(--ink-soft);font-size:13px;">항목 없음</li>`;
-    }
     html += `</ul>`;
   });
 
@@ -516,10 +495,6 @@ function renderTodos(){
     <select id="todo-cat-select">${todoCategories.map(c=>`<option value="${c}">${c}</option>`).join('')}</select>
     <input type="text" id="todo-new-input" placeholder="준비할 항목 추가...">
     <button id="todo-add-btn">추가</button>
-  </div>
-  <div class="todo-add-cat-row">
-    <input type="text" id="todo-new-cat-input" placeholder="새 카테고리 이름...">
-    <button id="todo-add-cat-btn">카테고리 추가</button>
   </div>`;
 
   todoCard.innerHTML = html;
@@ -547,53 +522,23 @@ function renderTodos(){
       renderTodos();
     });
   });
-  todoCard.querySelectorAll('.todo-cat').forEach(el=>{
-    el.addEventListener('blur', e=>{
-      const ci = +e.target.dataset.catIdx;
-      const oldName = todoCategories[ci];
-      const newName = e.target.textContent.trim();
-      if(newName && newName !== oldName){
-        todoCategories[ci] = newName;
-        todos.forEach(t=>{ if(t.cat === oldName) t.cat = newName; });
-        persistTodos();
-        renderTodos();
-      }
-    });
-  });
-  todoCard.querySelectorAll('.todo-cat-del').forEach(el=>{
-    el.addEventListener('click', e=>{
-      const ci = +e.target.dataset.catIdx;
-      const catName = todoCategories[ci];
-      const hasItems = todos.some(t=>t.cat===catName);
-      if(hasItems && !confirm(`"${catName}" 카테고리에 항목이 있어요. 카테고리와 그 안의 모든 항목을 삭제할까요?`)) return;
-      todoCategories.splice(ci,1);
-      todos = todos.filter(t=>t.cat!==catName);
+  function addChecklistItem(){
+    const sel = document.getElementById('todo-cat-select');
+    const input = document.getElementById('todo-new-input');
+    if(input.value.trim()){
+      todos.push({cat: sel.value, t: input.value.trim(), done:false});
       persistTodos();
       renderTodos();
-    });
-  });
+    }
+  }
   const addBtn = document.getElementById('todo-add-btn');
   if(addBtn){
-    addBtn.addEventListener('click', ()=>{
-      const sel = document.getElementById('todo-cat-select');
-      const input = document.getElementById('todo-new-input');
-      if(input.value.trim()){
-        todos.push({cat: sel.value, t: input.value.trim(), done:false});
-        persistTodos();
-        renderTodos();
-      }
-    });
+    addBtn.addEventListener('click', addChecklistItem);
   }
-  const addCatBtn = document.getElementById('todo-add-cat-btn');
-  if(addCatBtn){
-    addCatBtn.addEventListener('click', ()=>{
-      const input = document.getElementById('todo-new-cat-input');
-      const name = input.value.trim();
-      if(name && !todoCategories.includes(name)){
-        todoCategories.push(name);
-        persistTodos();
-        renderTodos();
-      }
+  const newTodoInput = document.getElementById('todo-new-input');
+  if(newTodoInput){
+    newTodoInput.addEventListener('keydown', e=>{
+      if(e.key === 'Enter'){ e.preventDefault(); addChecklistItem(); }
     });
   }
 }
@@ -758,8 +703,8 @@ const storageAPI = {
   async get(key, shared=false){
     if(db){
       try{
-        const snap = await getDoc(doc(db, 'trip', key));
-        if(snap.exists()) return {key, value: snap.data().value, shared};
+        const snap = await db.collection('trip').doc(key).get();
+        if(snap.exists) return {key, value: snap.data().value, shared};
         return null;
       }catch(e){ console.error('firestore get failed', e); }
     }
@@ -772,7 +717,7 @@ const storageAPI = {
   async set(key, value, shared=false){
     if(db){
       try{
-        await setDoc(doc(db, 'trip', key), {value, updatedAt: Date.now()});
+        await db.collection('trip').doc(key).set({value, updatedAt: Date.now()});
         return {key, value, shared};
       }catch(e){ console.error('firestore set failed', e); }
     }
@@ -949,16 +894,23 @@ function render(){
       render();
     });
   });
+  function addDayTodo(d){
+    const input = document.querySelector(`.dt-new-input[data-day="${d}"]`);
+    if(input.value.trim()){
+      if(!days[d].dayTodos) days[d].dayTodos = [];
+      days[d].dayTodos.push({t: input.value.trim(), done:false});
+      persist();
+      render();
+    }
+  }
   document.querySelectorAll('.dt-add-btn').forEach(el=>{
     el.addEventListener('click', e=>{
-      const d = +e.currentTarget.dataset.day;
-      const input = document.querySelector(`.dt-new-input[data-day="${d}"]`);
-      if(input.value.trim()){
-        if(!days[d].dayTodos) days[d].dayTodos = [];
-        days[d].dayTodos.push({t: input.value.trim(), done:false});
-        persist();
-        render();
-      }
+      addDayTodo(+e.currentTarget.dataset.day);
+    });
+  });
+  document.querySelectorAll('.dt-new-input').forEach(el=>{
+    el.addEventListener('keydown', e=>{
+      if(e.key === 'Enter'){ e.preventDefault(); addDayTodo(+e.target.dataset.day); }
     });
   });
 
@@ -1025,16 +977,29 @@ function render(){
       render();
     });
   });
+  function addItem(row, d){
+    const timeIn = row.querySelector('.time-in');
+    const nameIn = row.querySelector('.name');
+    if(nameIn.value.trim()){
+      days[d].items.push({t: timeIn.value.trim() || '-', x: nameIn.value.trim()});
+      persist();
+      render();
+    }
+  }
   document.querySelectorAll('.add-btn').forEach(el=>{
     el.addEventListener('click', e=>{
       const d = +e.target.dataset.day;
       const row = e.target.closest('.add-row');
-      const timeIn = row.querySelector('.time-in');
-      const nameIn = row.querySelector('.name');
-      if(nameIn.value.trim()){
-        days[d].items.push({t: timeIn.value.trim() || '-', x: nameIn.value.trim()});
-        persist();
-        render();
+      addItem(row, d);
+    });
+  });
+  document.querySelectorAll('.add-row .time-in, .add-row .name').forEach(el=>{
+    el.addEventListener('keydown', e=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        const d = +e.target.dataset.day;
+        const row = e.target.closest('.add-row');
+        addItem(row, d);
       }
     });
   });
@@ -1055,7 +1020,7 @@ function setupRealtimeSync(){
   let ignoreNextTodos = false;
 
   onSnapshot(doc(db, 'trip', 'itinerary_days'), (snap)=>{
-    if(!snap.exists()) return;
+    if(!snap.exists) return;
     try{
       const parsed = JSON.parse(snap.data().value);
       if(parsed && parsed.version === ITINERARY_VERSION && Array.isArray(parsed.days) && parsed.days.length === days.length){
