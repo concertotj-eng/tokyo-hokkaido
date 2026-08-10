@@ -131,8 +131,13 @@
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
   .day-date, .day-loc{outline:none;border-radius:4px;padding:0 2px;margin:0 -2px;}
-  .day-date:focus, .day-loc:focus{background:#F5F3EA;color:var(--ink);}
-  .day-loc:focus{white-space:normal;text-overflow:clip;}
+  .day-date[contenteditable="true"], .day-loc[contenteditable="true"]{background:#F5F3EA;color:var(--ink);}
+  .day-loc[contenteditable="true"]{white-space:normal;text-overflow:clip;}
+  .edit-head-btn{
+    flex:0 0 auto;border:none;background:none;font-size:13px;
+    padding:4px 6px;opacity:0.55;
+  }
+  .edit-head-btn:active{opacity:1;}
   .day-head .chevron{
     flex:0 0 auto;font-size:13px;color:var(--ink-soft);
     transition:transform .2s;
@@ -275,28 +280,34 @@
     font-family:'JetBrains Mono',monospace;
   }
 
-  .cat-total-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:14px;}
-  .cat-total-table td{padding:6px 4px;border-bottom:1px dotted var(--line);}
-  .cat-total-table tr:last-child td{border-bottom:none;}
-  .cat-total-table .c-cat{color:var(--ink);}
-  .cat-total-table .c-amt{text-align:right;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
-  .cat-total-table .cat-grand td{padding-top:10px;border-top:2px solid var(--indigo);font-weight:800;}
   .cost-section-label{
     font-size:11px;font-weight:800;color:var(--indigo);text-transform:uppercase;
     letter-spacing:0.4px;margin:0 0 6px;
   }
 
-  .cost-day-block{padding:10px 0;border-bottom:1px solid var(--line);}
-  .cost-day-block:first-child{padding-top:0;}
-  .cost-day-head{
+  .cost-grand-box{
     display:flex;justify-content:space-between;align-items:baseline;
-    font-size:12px;font-weight:800;color:var(--indigo);margin-bottom:6px;
+    background:var(--indigo);color:#fff;
+    border-radius:10px;padding:12px 14px;margin-bottom:12px;
   }
-  .cost-day-sub{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:var(--ink);}
-  .cost-empty-day{color:var(--ink-soft);font-size:11.5px;padding:2px 0 4px;}
+  .cost-grand-label{font-size:12px;font-weight:700;opacity:0.85;}
+  .cost-grand-amt{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;}
+
+  .cost-cat-block{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden;}
+  .cost-cat-head{
+    width:100%;display:flex;align-items:center;gap:8px;
+    border:none;background:var(--card);padding:10px 12px;text-align:left;
+  }
+  .cost-cat-title{font-size:13px;font-weight:700;color:var(--ink);flex:1;}
+  .cost-cat-amt{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;color:var(--ink);}
+  .cost-cat-chevron{font-size:11px;color:var(--ink-soft);transition:transform .15s;}
+  .cost-cat-chevron.open{transform:rotate(180deg);}
+  .cost-cat-detail{padding:0 12px 10px;background:#FAFAF7;}
+
+  .cost-empty-day{color:var(--ink-soft);font-size:11.5px;padding:8px 2px;}
 
   .cost-table{width:100%;border-collapse:collapse;font-size:12.5px;}
-  .cost-table td{padding:4px 2px;border-bottom:1px dotted var(--line);vertical-align:top;}
+  .cost-table td{padding:5px 2px;border-bottom:1px dotted var(--line);vertical-align:top;}
   .cost-table tr:last-child td{border-bottom:none;}
   .cost-table .c-label{color:var(--ink);}
   .cost-table .c-amt{text-align:right;font-family:'JetBrains Mono',monospace;white-space:nowrap;padding-right:6px;}
@@ -304,37 +315,32 @@
   .cost-table .del-extra{border:none;background:none;color:#BDBAAE;font-size:13px;padding:2px 4px;}
   .cost-table .c-equiv-row td{color:var(--ink-soft);font-size:10.5px;font-style:italic;border-bottom-style:dotted;}
 
-  .cost-add-toggle{
-    margin-top:6px;border:none;background:none;color:var(--indigo);
-    font-size:11px;font-weight:700;padding:3px 2px;
+  .cost-add-section{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);}
+  .cost-add-form{display:flex;flex-direction:column;gap:6px;}
+  .cost-add-form .extra-day{
+    font-size:12px;border:1px dashed var(--line);border-radius:7px;
+    padding:7px 8px;background:#FAFAF6;color:var(--ink);
   }
-  .cost-add-row{display:flex;align-items:center;gap:6px;margin-top:8px;}
-  .cost-add-row .extra-label{
-    flex:1;min-width:0;box-sizing:border-box;font-size:12.5px;
+  .cost-add-form .extra-label{
+    width:100%;box-sizing:border-box;font-size:12.5px;
     border:1px dashed var(--line);border-radius:7px;padding:8px 9px;background:#FAFAF6;
   }
-  .cost-add-row .extra-cur{
+  .cost-add-row-2{display:flex;align-items:center;gap:6px;}
+  .cost-add-row-2 .extra-cur{
     flex:0 0 auto;
     border:1px dashed var(--line);background:#FAFAF6;color:var(--ink-soft);
     border-radius:7px;padding:8px 9px;font-size:12px;
   }
-  .cost-add-row .extra-amount{
+  .cost-add-row-2 .extra-amount{
     flex:0 0 64px;width:64px;box-sizing:border-box;
     font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--ink);
     border:1px dashed var(--line);border-radius:7px;padding:8px 6px;background:#FAFAF6;text-align:right;
   }
-  .cost-add-row .extra-add-btn{
-    flex:0 0 auto;
+  .cost-add-row-2 .extra-add-btn{
+    flex:1;
     border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;
-    border-radius:7px;padding:8px 12px;font-size:12px;
+    border-radius:7px;padding:8px 12px;font-size:12.5px;
   }
-
-  .cost-grand-total{
-    display:flex;justify-content:space-between;align-items:baseline;
-    margin-top:12px;padding-top:12px;border-top:2px solid var(--indigo);
-    font-weight:800;font-size:13px;
-  }
-  .cost-grand-total .c-amt{font-family:'JetBrains Mono',monospace;}
 
   .add-row{display:flex;gap:6px;margin-top:8px;}
   .add-row input[type=text]{
@@ -549,15 +555,18 @@ const todoChevron = document.getElementById('todo-chevron');
 
 async function persistTodos(){
   try{
-    await storageAPI.set('itinerary_todos', JSON.stringify({categories: todoCategories, items: todos, collapsed: todoCollapsed}), false);
+    await storageAPI.set('itinerary_todos', JSON.stringify({
+      categories: todoCategories,
+      items: todos,
+      collapsed: todoCollapsed
+    }), false);
     flashSave();
   }catch(e){ console.error('todo save failed', e); }
 }
 
+// 저장된 데이터가 있으면 그 내용을 그대로 신뢰합니다.
+// 사용자가 지우거나 수정한 내용을 자동으로 되돌리거나 채워 넣지 않습니다.
 async function loadTodos(){
-  const defaultCategories = todoCategories.slice();
-  const defaultTodos = todos.slice();
-  const categoryRenames = { "렌터카": "교통/렌터카" };
   try{
     const res = await storageAPI.get('itinerary_todos', false);
     if(res && res.value){
@@ -566,21 +575,6 @@ async function loadTodos(){
         todos = parsed.items;
         todoCategories = parsed.categories;
         todoCollapsed = !!parsed.collapsed;
-
-        // 예전 카테고리 이름을 새 이름으로 합침 (중복 방지)
-        Object.entries(categoryRenames).forEach(([oldName, newName])=>{
-          if(todoCategories.includes(oldName)){
-            todos.forEach(t=>{ if(t.cat === oldName) t.cat = newName; });
-            todoCategories = todoCategories.filter(c=>c !== oldName);
-            if(!todoCategories.includes(newName)) todoCategories.push(newName);
-          }
-        });
-
-        defaultCategories.forEach(c=>{ if(!todoCategories.includes(c)) todoCategories.push(c); });
-        defaultTodos.forEach(dt=>{
-          if(!todos.some(t=> t.t === dt.t)) todos.push(dt);
-        });
-        persistTodos();
       }
     }
   }catch(e){ /* no saved todos yet, use defaults */ }
@@ -741,96 +735,99 @@ const COST_CAT_META = [
   {key:'flight', icon:'✈️', label:'항공권'},
   {key:'hotel', icon:'🏨', label:'숙소'},
   {key:'car', icon:'🚗', label:'렌터카'},
-  {key:'item', icon:'🎫', label:'일정'},
+  {key:'item', icon:'🎫', label:'일정·활동'},
   {key:'extra', icon:'🧾', label:'기타 지출'}
 ];
+
+let costCatOpen = {}; // 카테고리별 펼침 상태 (기본 전부 접힘)
 
 function renderCostSummary(){
   applyCostCollapsedState();
   let totalJpy = 0, totalKrw = 0;
   const catGrand = { flight:{jpy:0,krw:0}, hotel:{jpy:0,krw:0}, car:{jpy:0,krw:0}, item:{jpy:0,krw:0}, extra:{jpy:0,krw:0} };
-  let dayBlocks = '';
+  const catLines = { flight:[], hotel:[], car:[], item:[], extra:[] };
 
   days.forEach((day, di)=>{
     const {cats, jpy, krw} = calcDayCost(day);
     totalJpy += jpy; totalKrw += krw;
     COST_CAT_META.forEach(m=>{ catGrand[m.key].jpy += cats[m.key].jpy; catGrand[m.key].krw += cats[m.key].krw; });
 
-    let lineRows = '';
     (day.flights||[]).forEach(f=>{
       if(f.cost == null || f.cost === '') return;
-      lineRows += `<tr><td class="c-label">✈️ ${f.badge}</td><td class="c-amt">${formatCost(f.cost, f.currency||'KRW')}</td><td class="c-x"></td></tr>`;
+      catLines.flight.push(`<tr><td class="c-label">Day${day.num} · ${f.badge}</td><td class="c-amt">${formatCost(f.cost, f.currency||'KRW')}</td><td class="c-x"></td></tr>`);
     });
     if(day.hotel && day.hotel.cost != null && day.hotel.cost !== ''){
       const hCur = day.hotel.currency || 'KRW';
-      lineRows += `<tr><td class="c-label">🏨 ${day.hotel.name}</td><td class="c-amt">${formatCost(day.hotel.cost, hCur)}</td><td class="c-x"></td></tr>`;
+      catLines.hotel.push(`<tr><td class="c-label">Day${day.num} · ${day.hotel.name}</td><td class="c-amt">${formatCost(day.hotel.cost, hCur)}</td><td class="c-x"></td></tr>`);
       if(hCur === 'JPY' && day.hotel.krwEquiv != null){
-        lineRows += `<tr class="c-equiv-row"><td class="c-label">　└ 원화 환산 (참고, ${day.hotel.krwEquivDate||''})</td><td class="c-amt">${formatCost(day.hotel.krwEquiv,'KRW')}</td><td class="c-x"></td></tr>`;
+        catLines.hotel.push(`<tr class="c-equiv-row"><td class="c-label">　└ 원화 환산 (참고, ${day.hotel.krwEquivDate||''})</td><td class="c-amt">${formatCost(day.hotel.krwEquiv,'KRW')}</td><td class="c-x"></td></tr>`);
       }
     }
     if(day.car && day.car.cost != null && day.car.cost !== ''){
-      lineRows += `<tr><td class="c-label">🚗 ${day.car.co} (${day.car.event})</td><td class="c-amt">${formatCost(day.car.cost, day.car.currency||'JPY')}</td><td class="c-x"></td></tr>`;
+      catLines.car.push(`<tr><td class="c-label">Day${day.num} · ${day.car.co} (${day.car.event})</td><td class="c-amt">${formatCost(day.car.cost, day.car.currency||'JPY')}</td><td class="c-x"></td></tr>`);
     }
     (day.items||[]).forEach((it)=>{
       if(it.cost == null || it.cost === '') return;
-      lineRows += `<tr><td class="c-label">🎫 ${it.x}</td><td class="c-amt">${formatCost(it.cost, it.currency||'JPY')}</td><td class="c-x"></td></tr>`;
+      catLines.item.push(`<tr><td class="c-label">Day${day.num} · ${it.x}</td><td class="c-amt">${formatCost(it.cost, it.currency||'JPY')}</td><td class="c-x"></td></tr>`);
     });
     (day.extraCosts||[]).forEach((ec, ei)=>{
-      lineRows += `<tr><td class="c-label">🧾 ${ec.label}</td><td class="c-amt">${formatCost(ec.cost, ec.currency||'JPY')}</td><td class="c-x"><button class="del-extra" data-day="${di}" data-idx="${ei}">✕</button></td></tr>`;
+      catLines.extra.push(`<tr><td class="c-label">Day${day.num} · ${ec.label}</td><td class="c-amt">${formatCost(ec.cost, ec.currency||'JPY')}</td><td class="c-x"><button class="del-extra" data-day="${di}" data-idx="${ei}">✕</button></td></tr>`);
     });
-
-    const subtotalParts = [];
-    if(jpy) subtotalParts.push(formatCost(jpy,'JPY'));
-    if(krw) subtotalParts.push(formatCost(krw,'KRW'));
-
-    dayBlocks += `<div class="cost-day-block">
-      <div class="cost-day-head">
-        <span>Day${day.num} · ${day.date}</span>
-        <span class="cost-day-sub">${subtotalParts.join(' + ') || '—'}</span>
-      </div>
-      ${lineRows ? `<table class="cost-table">${lineRows}</table>` : `<div class="cost-empty-day">입력된 비용 없음</div>`}
-      <button class="cost-add-toggle" data-day="${di}">+ 지출 추가</button>
-      <div class="cost-add-row" hidden>
-        <input type="text" class="extra-label" data-day="${di}" placeholder="항목명">
-        <button class="extra-cur" data-day="${di}" data-cur="JPY">¥</button>
-        <input type="number" class="extra-amount" inputmode="numeric" data-day="${di}" placeholder="금액">
-        <button class="extra-add-btn" data-day="${di}">추가</button>
-      </div>
-    </div>`;
   });
 
   const totalParts = [];
   if(totalJpy) totalParts.push(formatCost(totalJpy,'JPY'));
   if(totalKrw) totalParts.push(formatCost(totalKrw,'KRW'));
 
-  let catRows = '';
+  let catBlocksHtml = '';
   COST_CAT_META.forEach(m=>{
     const c = catGrand[m.key];
-    if(!c.jpy && !c.krw) return;
+    const hasAmount = c.jpy || c.krw;
+    const lines = catLines[m.key];
+    if(!hasAmount && !lines.length) return; // 해당 카테고리에 아무 내역 없으면 표시 안 함
     const parts = [];
     if(c.jpy) parts.push(formatCost(c.jpy,'JPY'));
     if(c.krw) parts.push(formatCost(c.krw,'KRW'));
-    catRows += `<tr><td class="c-cat">${m.icon} ${m.label}</td><td class="c-amt">${parts.join(' + ')}</td></tr>`;
+    const isOpen = !!costCatOpen[m.key];
+    catBlocksHtml += `<div class="cost-cat-block">
+      <button class="cost-cat-head" data-cat="${m.key}">
+        <span class="cost-cat-title">${m.icon} ${m.label}</span>
+        <span class="cost-cat-amt">${parts.join(' + ') || '—'}</span>
+        <span class="cost-cat-chevron ${isOpen?'open':''}">▾</span>
+      </button>
+      <div class="cost-cat-detail" ${isOpen?'':'hidden'}>
+        ${lines.length ? `<table class="cost-table">${lines.join('')}</table>` : `<div class="cost-empty-day">내역 없음</div>`}
+      </div>
+    </div>`;
   });
-  const catTableHtml = catRows
-    ? `<div class="cost-section-label">카테고리별 합계</div>
-       <table class="cat-total-table">${catRows}
-         <tr class="cat-grand"><td>전체 합계</td><td class="c-amt">${totalParts.join(' + ') || '—'}</td></tr>
-       </table>`
-    : '';
 
-  costCard.innerHTML = `${catTableHtml}
-    <div class="cost-section-label">일자별 내역</div>
-    ${dayBlocks}`;
+  const dayOptions = days.map(d => `<option value="${d.num-1}">Day${d.num} · ${d.date}</option>`).join('');
 
-  costCard.querySelectorAll('.cost-add-toggle').forEach(el=>{
+  costCard.innerHTML = `
+    <div class="cost-grand-box">
+      <span class="cost-grand-label">전체 합계</span>
+      <span class="cost-grand-amt">${totalParts.join(' + ') || '—'}</span>
+    </div>
+    ${catBlocksHtml || `<div class="cost-empty-day">아직 입력된 비용이 없어요.</div>`}
+    <div class="cost-add-section">
+      <div class="cost-section-label">🧾 지출 추가</div>
+      <div class="cost-add-form">
+        <select class="extra-day">${dayOptions}</select>
+        <input type="text" class="extra-label" placeholder="항목명 (예: 편의점 간식)">
+        <div class="cost-add-row-2">
+          <button class="extra-cur" data-cur="JPY">¥</button>
+          <input type="number" class="extra-amount" inputmode="numeric" placeholder="금액">
+          <button class="extra-add-btn">추가</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  costCard.querySelectorAll('.cost-cat-head').forEach(el=>{
     el.addEventListener('click', e=>{
-      const block = e.currentTarget.closest('.cost-day-block');
-      const row = block.querySelector('.cost-add-row');
-      const willShow = row.hidden;
-      row.hidden = !willShow;
-      e.currentTarget.hidden = willShow;
-      if(willShow) row.querySelector('.extra-label').focus();
+      const cat = e.currentTarget.dataset.cat;
+      costCatOpen[cat] = !costCatOpen[cat];
+      renderCostSummary();
     });
   });
   costCard.querySelectorAll('.del-extra').forEach(el=>{
@@ -841,41 +838,40 @@ function renderCostSummary(){
       renderCostSummary();
     });
   });
-  costCard.querySelectorAll('.extra-cur').forEach(el=>{
-    el.addEventListener('click', e=>{
+  const curBtn = costCard.querySelector('.extra-cur');
+  if(curBtn){
+    curBtn.addEventListener('click', e=>{
       const btn = e.currentTarget;
       const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
       btn.dataset.cur = next;
       btn.textContent = next === 'JPY' ? '¥' : '₩';
     });
-  });
-  function addExtra(d){
-    const block = costCard.querySelectorAll('.cost-day-block')[d];
-    const labelIn = block.querySelector('.extra-label');
-    const amountIn = block.querySelector('.extra-amount');
-    const curBtn = block.querySelector('.extra-cur');
+  }
+  function addExtra(){
+    const dayIn = costCard.querySelector('.extra-day');
+    const labelIn = costCard.querySelector('.extra-label');
+    const amountIn = costCard.querySelector('.extra-amount');
+    const curBtnEl = costCard.querySelector('.extra-cur');
+    const d = +dayIn.value;
     const label = labelIn.value.trim();
     const amount = amountIn.value.trim();
     if(label && amount){
       if(!days[d].extraCosts) days[d].extraCosts = [];
-      days[d].extraCosts.push({label, cost: Number(amount), currency: curBtn.dataset.cur});
+      days[d].extraCosts.push({label, cost: Number(amount), currency: curBtnEl.dataset.cur});
+      costCatOpen.extra = true;
       persist();
       renderCostSummary();
     }
   }
-  costCard.querySelectorAll('.extra-add-btn').forEach(el=>{
-    el.addEventListener('click', e=>{ addExtra(+e.currentTarget.dataset.day); });
-  });
+  const addBtn = costCard.querySelector('.extra-add-btn');
+  if(addBtn) addBtn.addEventListener('click', addExtra);
   costCard.querySelectorAll('.extra-label, .extra-amount').forEach(el=>{
     el.addEventListener('keydown', e=>{
-      if(e.key === 'Enter'){ e.preventDefault(); addExtra(+e.target.dataset.day); }
+      if(e.key === 'Enter'){ e.preventDefault(); addExtra(); }
     });
   });
 
-  const headerParts = [];
-  if(totalJpy) headerParts.push(formatCost(totalJpy,'JPY'));
-  if(totalKrw) headerParts.push(formatCost(totalKrw,'KRW'));
-  costTotalEl.textContent = headerParts.join(' + ');
+  costTotalEl.textContent = totalParts.join(' + ');
 }
 
 const days = [
@@ -1010,6 +1006,9 @@ const days = [
   }
 ];
 
+// 각 Day 카드의 접힘/펼침 상태. render()가 다시 실행돼도 이 상태를 유지합니다.
+const dayCollapsedState = days.map((_, i) => i !== 0);
+
 const suggestions = {
   nature:[
     {n:"팜 토미타", r:4.4},
@@ -1090,7 +1089,7 @@ async function loadPersisted(){
     const res = await storageAPI.get('itinerary_days', false);
     if(res && res.value){
       const parsed = JSON.parse(res.value);
-      if(parsed && parsed.version === ITINERARY_VERSION && Array.isArray(parsed.days) && parsed.days.length === days.length){
+      if(parsed && Array.isArray(parsed.days) && parsed.days.length === days.length){
         parsed.days.forEach((d,i)=>{
           days[i].items = d.items;
           if(Array.isArray(d.dayTodos)) days[i].dayTodos = d.dayTodos;
@@ -1129,7 +1128,11 @@ function renderQuicknav(){
   nav.querySelectorAll('a').forEach(a=>{
     a.addEventListener('click', e=>{
       const targetEl = document.querySelector(a.getAttribute('href'));
-      if(targetEl) targetEl.classList.remove('collapsed');
+      if(targetEl){
+        targetEl.classList.remove('collapsed');
+        const di = days.findIndex(d => 'day-' + d.num === targetEl.id);
+        if(di >= 0) dayCollapsedState[di] = false;
+      }
     });
   });
 }
@@ -1138,7 +1141,7 @@ function render(){
   timeline.innerHTML = '';
   days.forEach((day, di)=>{
     const el = document.createElement('div');
-    el.className = 'day' + (di === 0 ? '' : ' collapsed');
+    el.className = 'day' + (dayCollapsedState[di] ? ' collapsed' : '');
     el.id = 'day-' + day.num;
 
     let flightsHtml = '';
@@ -1230,9 +1233,10 @@ function render(){
       <div class="day-head" data-toggle="${di}">
         <span class="num-badge">${day.num}</span>
         <div class="titles">
-          <h2>Day ${day.num} · <span class="day-date" contenteditable="true" data-day="${di}">${day.date}</span></h2>
-          <div class="loc day-loc" contenteditable="true" data-day="${di}">${day.loc}</div>
+          <h2>Day ${day.num} · <span class="day-date" data-day="${di}">${day.date}</span></h2>
+          <div class="loc day-loc" data-day="${di}">${day.loc}</div>
         </div>
+        <button class="edit-head-btn" data-day="${di}" title="날짜/이동경로 수정">✏️</button>
         <span class="chevron">▾</span>
       </div>
       <div class="card">
@@ -1264,24 +1268,46 @@ function render(){
   document.querySelectorAll('.day-head').forEach(el=>{
     el.addEventListener('click', e=>{
       if(e.target.closest('.day-date') || e.target.closest('.day-loc')) return;
-      el.closest('.day').classList.toggle('collapsed');
+      const di = +el.dataset.toggle;
+      dayCollapsedState[di] = !dayCollapsedState[di];
+      el.closest('.day').classList.toggle('collapsed', dayCollapsedState[di]);
     });
   });
 
+  document.querySelectorAll('.edit-head-btn').forEach(el=>{
+    el.addEventListener('click', e=>{
+      e.stopPropagation();
+      const di = +e.currentTarget.dataset.day;
+      const dayEl = document.getElementById('day-' + days[di].num);
+      const dateEl = dayEl.querySelector('.day-date');
+      const locEl = dayEl.querySelector('.day-loc');
+      const nowEditing = dateEl.getAttribute('contenteditable') === 'true';
+      if(nowEditing){
+        dateEl.removeAttribute('contenteditable');
+        locEl.removeAttribute('contenteditable');
+      } else {
+        dateEl.setAttribute('contenteditable','true');
+        locEl.setAttribute('contenteditable','true');
+        dateEl.focus();
+      }
+    });
+  });
   document.querySelectorAll('.day-date').forEach(el=>{
-    el.addEventListener('click', e=>{ e.stopPropagation(); });
+    el.addEventListener('click', e=>{ if(el.getAttribute('contenteditable')==='true') e.stopPropagation(); });
     el.addEventListener('blur', e=>{
       const d = +e.target.dataset.day;
       days[d].date = e.target.textContent.trim();
+      e.target.removeAttribute('contenteditable');
       persist();
       renderQuicknav();
     });
   });
   document.querySelectorAll('.day-loc').forEach(el=>{
-    el.addEventListener('click', e=>{ e.stopPropagation(); });
+    el.addEventListener('click', e=>{ if(el.getAttribute('contenteditable')==='true') e.stopPropagation(); });
     el.addEventListener('blur', e=>{
       const d = +e.target.dataset.day;
       days[d].loc = e.target.textContent.trim();
+      e.target.removeAttribute('contenteditable');
       persist();
       renderQuicknav();
     });
@@ -1612,7 +1638,7 @@ function setupRealtimeSync(){
     if(!snap.exists) return;
     try{
       const parsed = JSON.parse(snap.data().value);
-      if(parsed && parsed.version === ITINERARY_VERSION && Array.isArray(parsed.days) && parsed.days.length === days.length){
+      if(parsed && Array.isArray(parsed.days) && parsed.days.length === days.length){
         const anyMenuOpen = !!document.querySelector('.item-more-row:not([hidden])');
         if(anyMenuOpen) return; // avoid disrupting an open menu mid-interaction
         parsed.days.forEach((d,i)=>{
