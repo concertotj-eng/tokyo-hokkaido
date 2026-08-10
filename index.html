@@ -23,6 +23,7 @@
     --line:#E4E1D6;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  [hidden]{display:none !important;}
   html{-webkit-text-size-adjust:100%;}
   body{
     margin:0;
@@ -204,10 +205,15 @@
     border-radius:6px;padding:4px 6px;margin:0 -6px;
   }
   .list .txt:focus{background:#F5F3EA;}
-  .pin-btn{
+  .map-badge{
     flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;
-    text-decoration:none;font-size:16px;
-    padding:4px 6px;border-radius:6px;
+    text-decoration:none;font-size:15px;
+    padding:3px 5px;border-radius:6px;
+  }
+  .cost-badge{
+    flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+    color:#8A6D1E;background:#F7EFD8;border:1px solid #E9D9A8;
+    border-radius:12px;padding:3px 8px;white-space:nowrap;
   }
   .more-btn{
     flex-shrink:0;border:none;background:none;color:var(--ink-soft);
@@ -218,7 +224,7 @@
     display:flex;flex-direction:column;gap:1px;
     background:var(--card);border:1px solid var(--line);border-radius:10px;
     box-shadow:0 6px 18px rgba(34,38,47,0.14);
-    padding:4px;min-width:150px;
+    padding:4px;min-width:170px;
   }
   .item-more-row[hidden]{display:none;}
   .item-more-row button{
@@ -236,6 +242,99 @@
     padding:8px 10px;background:#FAFAF6;
   }
   .item-link-row .link-input:focus{background:#F5F3EA;border-style:solid;}
+
+  .item-cost-row{margin-top:6px;display:flex;gap:6px;}
+  .item-cost-row .cost-input{
+    flex:1;box-sizing:border-box;font-size:14px;color:var(--ink);
+    outline:none;border:1px dashed var(--line);border-radius:8px;
+    padding:8px 10px;background:#FAFAF6;font-family:'JetBrains Mono',monospace;
+  }
+  .item-cost-row .cost-input:focus{background:#F5F3EA;border-style:solid;}
+  .item-cost-row .cost-cur{
+    border:1px dashed var(--line);background:#FAFAF6;color:var(--ink-soft);
+    border-radius:8px;padding:8px 10px;font-size:12.5px;white-space:nowrap;
+  }
+  .hotel-cost-btn, .car-cost-btn, .flight-cost-btn{
+    flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+    border:none;border-radius:12px;padding:3px 8px;white-space:nowrap;
+    background:rgba(255,255,255,0.6);color:#4A3F72;
+  }
+  .flight-cost-btn{background:rgba(0,0,0,0.06);color:#5A4E1F;margin-left:auto;}
+  .hotel-cost-row, .flight-cost-row, .car-cost-row{margin-top:6px;padding:0 2px;display:flex;gap:6px;}
+  .hotel-cost-row input[type=number], .flight-cost-row input[type=number], .car-cost-row input[type=number]{
+    flex:1;box-sizing:border-box;font-size:13px;color:var(--ink);
+    outline:none;border:1px dashed var(--line);border-radius:8px;
+    padding:7px 9px;background:#FAFAF6;font-family:'JetBrains Mono',monospace;
+  }
+  .hotel-cost-cur, .flight-cost-cur, .car-cost-cur{
+    border:1px dashed var(--line);background:#FAFAF6;color:var(--ink-soft);
+    border-radius:8px;padding:7px 10px;font-size:12.5px;
+  }
+  .hotel-equiv{
+    margin-top:2px;font-size:10.5px;color:#8A6D1E;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  .cat-total-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:14px;}
+  .cat-total-table td{padding:6px 4px;border-bottom:1px dotted var(--line);}
+  .cat-total-table tr:last-child td{border-bottom:none;}
+  .cat-total-table .c-cat{color:var(--ink);}
+  .cat-total-table .c-amt{text-align:right;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+  .cat-total-table .cat-grand td{padding-top:10px;border-top:2px solid var(--indigo);font-weight:800;}
+  .cost-section-label{
+    font-size:11px;font-weight:800;color:var(--indigo);text-transform:uppercase;
+    letter-spacing:0.4px;margin:0 0 6px;
+  }
+
+  .cost-day-block{padding:10px 0;border-bottom:1px solid var(--line);}
+  .cost-day-block:first-child{padding-top:0;}
+  .cost-day-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-size:12px;font-weight:800;color:var(--indigo);margin-bottom:6px;
+  }
+  .cost-day-sub{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:var(--ink);}
+  .cost-empty-day{color:var(--ink-soft);font-size:11.5px;padding:2px 0 4px;}
+
+  .cost-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .cost-table td{padding:4px 2px;border-bottom:1px dotted var(--line);vertical-align:top;}
+  .cost-table tr:last-child td{border-bottom:none;}
+  .cost-table .c-label{color:var(--ink);}
+  .cost-table .c-amt{text-align:right;font-family:'JetBrains Mono',monospace;white-space:nowrap;padding-right:6px;}
+  .cost-table .c-x{width:20px;text-align:right;}
+  .cost-table .del-extra{border:none;background:none;color:#BDBAAE;font-size:13px;padding:2px 4px;}
+  .cost-table .c-equiv-row td{color:var(--ink-soft);font-size:10.5px;font-style:italic;border-bottom-style:dotted;}
+
+  .cost-add-toggle{
+    margin-top:6px;border:none;background:none;color:var(--indigo);
+    font-size:11px;font-weight:700;padding:3px 2px;
+  }
+  .cost-add-row{display:flex;align-items:center;gap:6px;margin-top:8px;}
+  .cost-add-row .extra-label{
+    flex:1;min-width:0;box-sizing:border-box;font-size:12.5px;
+    border:1px dashed var(--line);border-radius:7px;padding:8px 9px;background:#FAFAF6;
+  }
+  .cost-add-row .extra-cur{
+    flex:0 0 auto;
+    border:1px dashed var(--line);background:#FAFAF6;color:var(--ink-soft);
+    border-radius:7px;padding:8px 9px;font-size:12px;
+  }
+  .cost-add-row .extra-amount{
+    flex:0 0 64px;width:64px;box-sizing:border-box;
+    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--ink);
+    border:1px dashed var(--line);border-radius:7px;padding:8px 6px;background:#FAFAF6;text-align:right;
+  }
+  .cost-add-row .extra-add-btn{
+    flex:0 0 auto;
+    border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;
+    border-radius:7px;padding:8px 12px;font-size:12px;
+  }
+
+  .cost-grand-total{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-top:12px;padding-top:12px;border-top:2px solid var(--indigo);
+    font-weight:800;font-size:13px;
+  }
+  .cost-grand-total .c-amt{font-family:'JetBrains Mono',monospace;}
 
   .add-row{display:flex;gap:6px;margin-top:8px;}
   .add-row input[type=text]{
@@ -377,6 +476,17 @@
       <span class="todo-progress" id="todo-progress"></span>
     </div>
     <div class="todo-card" id="todo-card"></div>
+  </div>
+
+  <div class="todo-section">
+    <div class="todo-head" id="cost-head">
+      <div class="left">
+        <span class="todo-chevron" id="cost-chevron">▾</span>
+        <h2>💰 비용 정리</h2>
+      </div>
+      <span class="todo-progress" id="cost-total"></span>
+    </div>
+    <div class="todo-card" id="cost-card"></div>
   </div>
 
   <div class="timeline" id="timeline"></div>
@@ -559,6 +669,215 @@ function renderTodos(){
   }
 }
 
+let costCollapsed = true;
+const costCard = document.getElementById('cost-card');
+const costTotalEl = document.getElementById('cost-total');
+const costHead = document.getElementById('cost-head');
+const costChevron = document.getElementById('cost-chevron');
+
+function formatCost(n, cur){
+  const num = Number(n);
+  if(isNaN(num)) return '';
+  const symbol = cur === 'KRW' ? '₩' : '¥';
+  return symbol + num.toLocaleString();
+}
+
+async function fetchJpyToKrw(jpyAmount){
+  const today = new Date().toISOString().slice(0,10); // 입력일(오늘) 기준
+  try{
+    const res = await fetch(`https://api.frankfurter.app/${today}?from=JPY&to=KRW`);
+    const data = await res.json();
+    const rate = data && data.rates && data.rates.KRW;
+    if(!rate) return null;
+    return { krw: Math.round(jpyAmount * rate), date: today };
+  }catch(e){
+    console.error('환율 조회 실패', e);
+    return null;
+  }
+}
+
+function applyCostCollapsedState(){
+  costCard.classList.toggle('collapsed', costCollapsed);
+  costChevron.classList.toggle('collapsed', costCollapsed);
+}
+
+costHead.addEventListener('click', ()=>{
+  costCollapsed = !costCollapsed;
+  applyCostCollapsedState();
+});
+
+function calcDayCost(day){
+  const cats = { flight:{jpy:0,krw:0}, hotel:{jpy:0,krw:0}, car:{jpy:0,krw:0}, item:{jpy:0,krw:0}, extra:{jpy:0,krw:0} };
+  (day.flights||[]).forEach(f=>{
+    if(f.cost != null && f.cost !== ''){
+      const n = Number(f.cost) || 0;
+      if((f.currency||'KRW') === 'JPY') cats.flight.jpy += n; else cats.flight.krw += n;
+    }
+  });
+  if(day.hotel && day.hotel.cost != null && day.hotel.cost !== ''){
+    const n = Number(day.hotel.cost) || 0;
+    if((day.hotel.currency||'KRW') === 'JPY') cats.hotel.jpy += n; else cats.hotel.krw += n;
+  }
+  if(day.car && day.car.cost != null && day.car.cost !== ''){
+    const n = Number(day.car.cost) || 0;
+    if((day.car.currency||'JPY') === 'KRW') cats.car.krw += n; else cats.car.jpy += n;
+  }
+  (day.items||[]).forEach(it=>{
+    if(it.cost != null && it.cost !== ''){
+      const n = Number(it.cost) || 0;
+      if((it.currency||'JPY') === 'KRW') cats.item.krw += n; else cats.item.jpy += n;
+    }
+  });
+  (day.extraCosts||[]).forEach(ec=>{
+    const n = Number(ec.cost) || 0;
+    if((ec.currency||'JPY') === 'KRW') cats.extra.krw += n; else cats.extra.jpy += n;
+  });
+  const jpy = cats.flight.jpy + cats.hotel.jpy + cats.car.jpy + cats.item.jpy + cats.extra.jpy;
+  const krw = cats.flight.krw + cats.hotel.krw + cats.car.krw + cats.item.krw + cats.extra.krw;
+  return {cats, jpy, krw};
+}
+
+const COST_CAT_META = [
+  {key:'flight', icon:'✈️', label:'항공권'},
+  {key:'hotel', icon:'🏨', label:'숙소'},
+  {key:'car', icon:'🚗', label:'렌터카'},
+  {key:'item', icon:'🎫', label:'일정'},
+  {key:'extra', icon:'🧾', label:'기타 지출'}
+];
+
+function renderCostSummary(){
+  applyCostCollapsedState();
+  let totalJpy = 0, totalKrw = 0;
+  const catGrand = { flight:{jpy:0,krw:0}, hotel:{jpy:0,krw:0}, car:{jpy:0,krw:0}, item:{jpy:0,krw:0}, extra:{jpy:0,krw:0} };
+  let dayBlocks = '';
+
+  days.forEach((day, di)=>{
+    const {cats, jpy, krw} = calcDayCost(day);
+    totalJpy += jpy; totalKrw += krw;
+    COST_CAT_META.forEach(m=>{ catGrand[m.key].jpy += cats[m.key].jpy; catGrand[m.key].krw += cats[m.key].krw; });
+
+    let lineRows = '';
+    (day.flights||[]).forEach(f=>{
+      if(f.cost == null || f.cost === '') return;
+      lineRows += `<tr><td class="c-label">✈️ ${f.badge}</td><td class="c-amt">${formatCost(f.cost, f.currency||'KRW')}</td><td class="c-x"></td></tr>`;
+    });
+    if(day.hotel && day.hotel.cost != null && day.hotel.cost !== ''){
+      const hCur = day.hotel.currency || 'KRW';
+      lineRows += `<tr><td class="c-label">🏨 ${day.hotel.name}</td><td class="c-amt">${formatCost(day.hotel.cost, hCur)}</td><td class="c-x"></td></tr>`;
+      if(hCur === 'JPY' && day.hotel.krwEquiv != null){
+        lineRows += `<tr class="c-equiv-row"><td class="c-label">　└ 원화 환산 (참고, ${day.hotel.krwEquivDate||''})</td><td class="c-amt">${formatCost(day.hotel.krwEquiv,'KRW')}</td><td class="c-x"></td></tr>`;
+      }
+    }
+    if(day.car && day.car.cost != null && day.car.cost !== ''){
+      lineRows += `<tr><td class="c-label">🚗 ${day.car.co} (${day.car.event})</td><td class="c-amt">${formatCost(day.car.cost, day.car.currency||'JPY')}</td><td class="c-x"></td></tr>`;
+    }
+    (day.items||[]).forEach((it)=>{
+      if(it.cost == null || it.cost === '') return;
+      lineRows += `<tr><td class="c-label">🎫 ${it.x}</td><td class="c-amt">${formatCost(it.cost, it.currency||'JPY')}</td><td class="c-x"></td></tr>`;
+    });
+    (day.extraCosts||[]).forEach((ec, ei)=>{
+      lineRows += `<tr><td class="c-label">🧾 ${ec.label}</td><td class="c-amt">${formatCost(ec.cost, ec.currency||'JPY')}</td><td class="c-x"><button class="del-extra" data-day="${di}" data-idx="${ei}">✕</button></td></tr>`;
+    });
+
+    const subtotalParts = [];
+    if(jpy) subtotalParts.push(formatCost(jpy,'JPY'));
+    if(krw) subtotalParts.push(formatCost(krw,'KRW'));
+
+    dayBlocks += `<div class="cost-day-block">
+      <div class="cost-day-head">
+        <span>Day${day.num} · ${day.date}</span>
+        <span class="cost-day-sub">${subtotalParts.join(' + ') || '—'}</span>
+      </div>
+      ${lineRows ? `<table class="cost-table">${lineRows}</table>` : `<div class="cost-empty-day">입력된 비용 없음</div>`}
+      <button class="cost-add-toggle" data-day="${di}">+ 지출 추가</button>
+      <div class="cost-add-row" hidden>
+        <input type="text" class="extra-label" data-day="${di}" placeholder="항목명">
+        <button class="extra-cur" data-day="${di}" data-cur="JPY">¥</button>
+        <input type="number" class="extra-amount" inputmode="numeric" data-day="${di}" placeholder="금액">
+        <button class="extra-add-btn" data-day="${di}">추가</button>
+      </div>
+    </div>`;
+  });
+
+  const totalParts = [];
+  if(totalJpy) totalParts.push(formatCost(totalJpy,'JPY'));
+  if(totalKrw) totalParts.push(formatCost(totalKrw,'KRW'));
+
+  let catRows = '';
+  COST_CAT_META.forEach(m=>{
+    const c = catGrand[m.key];
+    if(!c.jpy && !c.krw) return;
+    const parts = [];
+    if(c.jpy) parts.push(formatCost(c.jpy,'JPY'));
+    if(c.krw) parts.push(formatCost(c.krw,'KRW'));
+    catRows += `<tr><td class="c-cat">${m.icon} ${m.label}</td><td class="c-amt">${parts.join(' + ')}</td></tr>`;
+  });
+  const catTableHtml = catRows
+    ? `<div class="cost-section-label">카테고리별 합계</div>
+       <table class="cat-total-table">${catRows}
+         <tr class="cat-grand"><td>전체 합계</td><td class="c-amt">${totalParts.join(' + ') || '—'}</td></tr>
+       </table>`
+    : '';
+
+  costCard.innerHTML = `${catTableHtml}
+    <div class="cost-section-label">일자별 내역</div>
+    ${dayBlocks}`;
+
+  costCard.querySelectorAll('.cost-add-toggle').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const block = e.currentTarget.closest('.cost-day-block');
+      const row = block.querySelector('.cost-add-row');
+      const willShow = row.hidden;
+      row.hidden = !willShow;
+      e.currentTarget.hidden = willShow;
+      if(willShow) row.querySelector('.extra-label').focus();
+    });
+  });
+  costCard.querySelectorAll('.del-extra').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day, idx = +e.currentTarget.dataset.idx;
+      days[d].extraCosts.splice(idx,1);
+      persist();
+      renderCostSummary();
+    });
+  });
+  costCard.querySelectorAll('.extra-cur').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const btn = e.currentTarget;
+      const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
+      btn.dataset.cur = next;
+      btn.textContent = next === 'JPY' ? '¥' : '₩';
+    });
+  });
+  function addExtra(d){
+    const block = costCard.querySelectorAll('.cost-day-block')[d];
+    const labelIn = block.querySelector('.extra-label');
+    const amountIn = block.querySelector('.extra-amount');
+    const curBtn = block.querySelector('.extra-cur');
+    const label = labelIn.value.trim();
+    const amount = amountIn.value.trim();
+    if(label && amount){
+      if(!days[d].extraCosts) days[d].extraCosts = [];
+      days[d].extraCosts.push({label, cost: Number(amount), currency: curBtn.dataset.cur});
+      persist();
+      renderCostSummary();
+    }
+  }
+  costCard.querySelectorAll('.extra-add-btn').forEach(el=>{
+    el.addEventListener('click', e=>{ addExtra(+e.currentTarget.dataset.day); });
+  });
+  costCard.querySelectorAll('.extra-label, .extra-amount').forEach(el=>{
+    el.addEventListener('keydown', e=>{
+      if(e.key === 'Enter'){ e.preventDefault(); addExtra(+e.target.dataset.day); }
+    });
+  });
+
+  const headerParts = [];
+  if(totalJpy) headerParts.push(formatCost(totalJpy,'JPY'));
+  if(totalKrw) headerParts.push(formatCost(totalKrw,'KRW'));
+  costTotalEl.textContent = headerParts.join(' + ');
+}
+
 const days = [
   {
     num:1, date:"8/23 (일)", loc:"서울 → 도쿄",
@@ -578,7 +897,8 @@ const days = [
     places:[
       {t:"13:30", name:"모리미술관 (롯폰기힐즈)", pid:"ChIJg5RCD3eLGGAR6dbIHRM98w8"},
       {t:"16:00", name:"국립신미술관", pid:"ChIJP-vO9nuLGGARGJ2q8uryJUA"}
-    ]
+    ],
+    extraCosts:[]
   },
   {
     num:2, date:"8/24 (월)", loc:"도쿄 → 삿포로",
@@ -600,7 +920,8 @@ const days = [
     ],
     places:[
       {t:"10:00", name:"산토리미술관 (도쿄 미드타운)", pid:"ChIJbSqxxHiLGGARKEK0IzZMksI"}
-    ]
+    ],
+    extraCosts:[]
   },
   {
     num:3, date:"8/25 (화)", loc:"삿포로 → 후라노",
@@ -619,7 +940,8 @@ const days = [
     places:[
       {t:"오후", name:"팜 토미타", pid:"ChIJdzcW1F2zDF8Rkm1ghwLPbbc"},
       {t:"오후", name:"패치워크 로드", pid:"ChIJd9Pr7vPFDF8RHO34QlpJINs"}
-    ]
+    ],
+    extraCosts:[]
   },
   {
     num:4, date:"8/26 (수)", loc:"후라노 → 비에이(시라히게온천)",
@@ -638,7 +960,8 @@ const days = [
     places:[
       {t:"오전", name:"파노라마 로드", pid:"ChIJ2-2spEq0DF8RLtJVk9hpB0E"},
       {t:"오후", name:"시로히게 폭포", pid:"ChIJX3VG4K7MDF8RJmYvjz6VBgU"}
-    ]
+    ],
+    extraCosts:[]
   },
   {
     num:5, date:"8/27 (목)", loc:"비에이 → 다이세츠잔(아사히다케)",
@@ -662,7 +985,8 @@ const days = [
     places:[
       {t:"08:30", name:"아사히다케 로프웨이 산록역", pid:"ChIJH-lrt7PXDF8RXBNa8gRGnAw"},
       {t:"09:00", name:"스가타미노이케", pid:"ChIJ-6SI11EpDV8RvpJ7-fZKvos"}
-    ]
+    ],
+    extraCosts:[]
   },
   {
     num:6, date:"8/28 (금)", loc:"아사히다케 → 신치토세 → 도쿄 → 서울",
@@ -681,7 +1005,8 @@ const days = [
       {t:"ANA 귀국편 온라인 체크인 완료 확인", done:false},
       {t:"기념품/면세품 최종 확인", done:false}
     ],
-    places:[]
+    places:[],
+    extraCosts:[]
   }
 ];
 
@@ -771,6 +1096,25 @@ async function loadPersisted(){
           if(Array.isArray(d.dayTodos)) days[i].dayTodos = d.dayTodos;
           if(typeof d.date === 'string') days[i].date = d.date;
           if(typeof d.loc === 'string') days[i].loc = d.loc;
+          if(days[i].hotel && d.hotel && d.hotel.cost != null){
+            days[i].hotel.cost = d.hotel.cost;
+            if(d.hotel.currency) days[i].hotel.currency = d.hotel.currency;
+            if(d.hotel.krwEquiv != null) days[i].hotel.krwEquiv = d.hotel.krwEquiv;
+            if(d.hotel.krwEquivDate) days[i].hotel.krwEquivDate = d.hotel.krwEquivDate;
+          }
+          if(Array.isArray(d.extraCosts)) days[i].extraCosts = d.extraCosts;
+          if(Array.isArray(d.flights)){
+            d.flights.forEach((f,fi)=>{
+              if(days[i].flights[fi] && f.cost != null){
+                days[i].flights[fi].cost = f.cost;
+                if(f.currency) days[i].flights[fi].currency = f.currency;
+              }
+            });
+          }
+          if(days[i].car && d.car && d.car.cost != null){
+            days[i].car.cost = d.car.cost;
+            if(d.car.currency) days[i].car.currency = d.car.currency;
+          }
         });
       }
     }
@@ -798,38 +1142,77 @@ function render(){
     el.id = 'day-' + day.num;
 
     let flightsHtml = '';
-    day.flights.forEach(f=>{
-      flightsHtml += `<div class="flight"><span class="badge">${f.badge}</span><span class="path">${f.path}</span><span class="time">${f.time}</span></div>`;
+    let flightCostRowsHtml = '';
+    day.flights.forEach((f, fi)=>{
+      const fCur = f.currency || 'KRW';
+      const fCostBadge = (f.cost != null && f.cost !== '')
+        ? `<button class="flight-cost-btn" data-day="${di}" data-fi="${fi}">${formatCost(f.cost, fCur)}</button>`
+        : `<button class="flight-cost-btn" data-day="${di}" data-fi="${fi}">💰</button>`;
+      flightsHtml += `<div class="flight"><span class="badge">${f.badge}</span><span class="path">${f.path}</span><span class="time">${f.time}</span>${fCostBadge}</div>`;
+      flightCostRowsHtml += `<div class="flight-cost-row" data-day="${di}" data-fi="${fi}" hidden>
+        <input type="number" class="flight-cost-input" data-day="${di}" data-fi="${fi}" placeholder="항공권 비용" value="${f.cost!=null?f.cost:''}">
+        <button class="flight-cost-cur" data-day="${di}" data-fi="${fi}" data-cur="${fCur}">${fCur==='JPY'?'¥':'₩'}</button>
+      </div>`;
     });
 
     let hotelHtml = '';
+    let hotelCostRowHtml = '';
     if(day.hotel){
       const hMapUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(day.hotel.name) + (day.hotel.pid ? '&query_place_id=' + day.hotel.pid : '');
-      hotelHtml = `<div class="hotel-block"><span class="tag">숙소</span><div class="info"><b>${day.hotel.name}</b><span>${day.hotel.addr} · ${day.hotel.inout}</span></div><a class="item-map-link" href="${hMapUrl}" target="_blank" rel="noopener" title="구글맵에서 보기">${day.hotel.pid?'📍':'🗺️'}</a></div>`;
+      const hCur = day.hotel.currency || 'KRW';
+      const hCostBadge = (day.hotel.cost != null && day.hotel.cost !== '')
+        ? `<button class="hotel-cost-btn" data-day="${di}">${formatCost(day.hotel.cost, hCur)}</button>`
+        : `<button class="hotel-cost-btn" data-day="${di}">💰 비용</button>`;
+      const hEquiv = (hCur === 'JPY' && day.hotel.krwEquiv != null)
+        ? `<div class="hotel-equiv">≈ ${formatCost(day.hotel.krwEquiv,'KRW')} 원화 환산 (${day.hotel.krwEquivDate||''} 기준)</div>` : '';
+      hotelHtml = `<div class="hotel-block"><span class="tag">숙소</span><div class="info"><b>${day.hotel.name}</b><span>${day.hotel.addr} · ${day.hotel.inout}</span>${hEquiv}</div>${hCostBadge}<a class="item-map-link" href="${hMapUrl}" target="_blank" rel="noopener" title="구글맵에서 보기">${day.hotel.pid?'📍':'🗺️'}</a></div>`;
+      hotelCostRowHtml = `<div class="hotel-cost-row" data-day="${di}" hidden>
+        <input type="number" class="hotel-cost-input" data-day="${di}" placeholder="숙소 비용" value="${day.hotel.cost!=null?day.hotel.cost:''}">
+        <button class="hotel-cost-cur" data-day="${di}" data-cur="${hCur}">${hCur==='JPY'?'¥':'₩'}</button>
+      </div>`;
     }
     let carHtml = '';
+    let carCostRowHtml = '';
     if(day.car){
-      carHtml = `<div class="car-block"><span class="tag">차량${day.car.event}</span><div class="info"><b>${day.car.co}</b><span>${day.car.place} · ${day.car.time}</span></div></div>`;
+      const cCur = day.car.currency || 'JPY';
+      const cCostBadge = (day.car.cost != null && day.car.cost !== '')
+        ? `<button class="car-cost-btn" data-day="${di}">${formatCost(day.car.cost, cCur)}</button>`
+        : `<button class="car-cost-btn" data-day="${di}">💰 비용</button>`;
+      carHtml = `<div class="car-block"><span class="tag">차량${day.car.event}</span><div class="info"><b>${day.car.co}</b><span>${day.car.place} · ${day.car.time}</span></div>${cCostBadge}</div>`;
+      carCostRowHtml = `<div class="car-cost-row" data-day="${di}" hidden>
+        <input type="number" class="car-cost-input" data-day="${di}" placeholder="렌터카 비용" value="${day.car.cost!=null?day.car.cost:''}">
+        <button class="car-cost-cur" data-day="${di}" data-cur="${cCur}">${cCur==='JPY'?'¥':'₩'}</button>
+      </div>`;
     }
 
     let itemsHtml = '';
     day.items.forEach((it, ii)=>{
+      const costBadge = (it.cost != null && it.cost !== '')
+        ? `<button class="cost-badge" data-day="${di}" data-item="${ii}">${formatCost(it.cost, it.currency||'JPY')}</button>` : '';
+      const mapBadge = it.url
+        ? `<a class="map-badge" href="${it.url}" target="_blank" rel="noopener" title="구글맵에서 보기">📍</a>` : '';
       itemsHtml += `<li class="item-row">
         <div class="item-main">
           <span class="t" contenteditable="true" data-day="${di}" data-item="${ii}">${it.t}</span>
           <span class="txt" contenteditable="true" data-day="${di}" data-item="${ii}">${it.x}</span>
-          ${it.url ? `<a class="pin-btn added" href="${it.url}" target="_blank" rel="noopener" title="구글맵에서 보기">📍</a>` : ''}
+          ${costBadge}
+          ${mapBadge}
           <button class="more-btn" data-day="${di}" data-item="${ii}" title="더보기">⋯</button>
         </div>
         <div class="item-more-row" hidden>
           <button class="move-up" data-day="${di}" data-item="${ii}" ${ii===0?'disabled':''}>▲ 위로</button>
           <button class="move-down" data-day="${di}" data-item="${ii}" ${ii===day.items.length-1?'disabled':''}>▼ 아래로</button>
           <button class="link-btn" data-day="${di}" data-item="${ii}">🔗 ${it.url?'링크 수정':'구글맵 링크 추가'}</button>
+          <button class="cost-btn" data-day="${di}" data-item="${ii}">💰 ${it.cost!=null?'비용 수정':'비용 추가'}</button>
           <button class="del" data-day="${di}" data-item="${ii}">✕ 삭제</button>
         </div>
         <div class="item-link-row" hidden>
           <input type="text" class="link-input" data-day="${di}" data-item="${ii}"
             placeholder="구글맵에서 복사한 링크를 붙여넣기" value="${it.url ? it.url.replace(/"/g,'&quot;') : ''}">
+        </div>
+        <div class="item-cost-row" hidden>
+          <input type="number" class="cost-input" inputmode="numeric" data-day="${di}" data-item="${ii}" placeholder="금액 입력" value="${it.cost!=null?it.cost:''}">
+          <button class="cost-cur" data-day="${di}" data-item="${ii}" data-cur="${it.currency||'JPY'}">${(it.currency==='KRW')?'₩ 원':'¥ 엔'}</button>
         </div>
       </li>`;
     });
@@ -854,8 +1237,11 @@ function render(){
       </div>
       <div class="card">
         ${flightsHtml}
+        ${flightCostRowsHtml}
         ${hotelHtml}
+        ${hotelCostRowHtml}
         ${carHtml}
+        ${carCostRowHtml}
         <ul class="list">${itemsHtml}</ul>
         <div class="add-row">
           <input type="text" class="time-in" placeholder="시간" data-day="${di}">
@@ -1056,6 +1442,167 @@ function render(){
       render();
     });
   });
+
+  document.querySelectorAll('.cost-badge').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const itemRow = e.currentTarget.closest('.item-row');
+      const costRow = itemRow.querySelector('.item-cost-row');
+      costRow.hidden = false;
+      costRow.querySelector('.cost-input').focus();
+    });
+  });
+  document.querySelectorAll('.cost-btn').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const itemRow = e.currentTarget.closest('.item-row');
+      itemRow.querySelector('.item-more-row').hidden = true;
+      const costRow = itemRow.querySelector('.item-cost-row');
+      costRow.hidden = false;
+      costRow.querySelector('.cost-input').focus();
+    });
+  });
+  document.querySelectorAll('.item-cost-row .cost-input').forEach(el=>{
+    el.addEventListener('blur', e=>{
+      const d = +e.target.dataset.day, i = +e.target.dataset.item;
+      const val = e.target.value.trim();
+      if(val !== ''){
+        days[d].items[i].cost = Number(val);
+        if(!days[d].items[i].currency) days[d].items[i].currency = 'JPY';
+      } else {
+        delete days[d].items[i].cost;
+      }
+      persist();
+      render();
+    });
+  });
+  document.querySelectorAll('.item-cost-row .cost-cur').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const btn = e.currentTarget;
+      const d = +btn.dataset.day, i = +btn.dataset.item;
+      const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
+      btn.dataset.cur = next;
+      btn.textContent = next === 'JPY' ? '¥ 엔' : '₩ 원';
+      days[d].items[i].currency = next;
+      persist();
+      renderCostSummary();
+    });
+  });
+  document.querySelectorAll('.hotel-cost-btn').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day;
+      const row = document.querySelector(`.hotel-cost-row[data-day="${d}"]`);
+      if(row){ row.hidden = false; row.querySelector('.hotel-cost-input').focus(); }
+    });
+  });
+  document.querySelectorAll('.hotel-cost-cur').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const btn = e.currentTarget;
+      const d = +btn.dataset.day;
+      const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
+      btn.dataset.cur = next;
+      btn.textContent = next === 'JPY' ? '¥' : '₩';
+    });
+  });
+  document.querySelectorAll('.hotel-cost-input').forEach(el=>{
+    el.addEventListener('blur', async e=>{
+      const d = +e.target.dataset.day;
+      const val = e.target.value.trim();
+      const row = e.target.closest('.hotel-cost-row');
+      const curBtn = row.querySelector('.hotel-cost-cur');
+      const cur = curBtn.dataset.cur;
+      if(val !== ''){
+        days[d].hotel.cost = Number(val);
+        days[d].hotel.currency = cur;
+        if(cur === 'JPY'){
+          const result = await fetchJpyToKrw(Number(val));
+          if(result){
+            days[d].hotel.krwEquiv = result.krw;
+            days[d].hotel.krwEquivDate = result.date;
+          } else {
+            delete days[d].hotel.krwEquiv;
+            delete days[d].hotel.krwEquivDate;
+          }
+        } else {
+          delete days[d].hotel.krwEquiv;
+          delete days[d].hotel.krwEquivDate;
+        }
+      } else {
+        delete days[d].hotel.cost;
+        delete days[d].hotel.currency;
+        delete days[d].hotel.krwEquiv;
+        delete days[d].hotel.krwEquivDate;
+      }
+      persist();
+      render();
+    });
+  });
+
+  document.querySelectorAll('.flight-cost-btn').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day, fi = +e.currentTarget.dataset.fi;
+      const row = document.querySelector(`.flight-cost-row[data-day="${d}"][data-fi="${fi}"]`);
+      if(row){ row.hidden = false; row.querySelector('.flight-cost-input').focus(); }
+    });
+  });
+  document.querySelectorAll('.flight-cost-cur').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const btn = e.currentTarget;
+      const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
+      btn.dataset.cur = next;
+      btn.textContent = next === 'JPY' ? '¥' : '₩';
+    });
+  });
+  document.querySelectorAll('.flight-cost-input').forEach(el=>{
+    el.addEventListener('blur', e=>{
+      const d = +e.target.dataset.day, fi = +e.target.dataset.fi;
+      const val = e.target.value.trim();
+      const row = e.target.closest('.flight-cost-row');
+      const cur = row.querySelector('.flight-cost-cur').dataset.cur;
+      if(val !== ''){
+        days[d].flights[fi].cost = Number(val);
+        days[d].flights[fi].currency = cur;
+      } else {
+        delete days[d].flights[fi].cost;
+        delete days[d].flights[fi].currency;
+      }
+      persist();
+      render();
+    });
+  });
+
+  document.querySelectorAll('.car-cost-btn').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day;
+      const row = document.querySelector(`.car-cost-row[data-day="${d}"]`);
+      if(row){ row.hidden = false; row.querySelector('.car-cost-input').focus(); }
+    });
+  });
+  document.querySelectorAll('.car-cost-cur').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const btn = e.currentTarget;
+      const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
+      btn.dataset.cur = next;
+      btn.textContent = next === 'JPY' ? '¥' : '₩';
+    });
+  });
+  document.querySelectorAll('.car-cost-input').forEach(el=>{
+    el.addEventListener('blur', e=>{
+      const d = +e.target.dataset.day;
+      const val = e.target.value.trim();
+      const row = e.target.closest('.car-cost-row');
+      const cur = row.querySelector('.car-cost-cur').dataset.cur;
+      if(val !== ''){
+        days[d].car.cost = Number(val);
+        days[d].car.currency = cur;
+      } else {
+        delete days[d].car.cost;
+        delete days[d].car.currency;
+      }
+      persist();
+      render();
+    });
+  });
+
+  renderCostSummary();
 }
 
 function setupRealtimeSync(){
@@ -1073,6 +1620,25 @@ function setupRealtimeSync(){
           if(Array.isArray(d.dayTodos)) days[i].dayTodos = d.dayTodos;
           if(typeof d.date === 'string') days[i].date = d.date;
           if(typeof d.loc === 'string') days[i].loc = d.loc;
+          if(days[i].hotel && d.hotel && d.hotel.cost != null){
+            days[i].hotel.cost = d.hotel.cost;
+            if(d.hotel.currency) days[i].hotel.currency = d.hotel.currency;
+            if(d.hotel.krwEquiv != null) days[i].hotel.krwEquiv = d.hotel.krwEquiv;
+            if(d.hotel.krwEquivDate) days[i].hotel.krwEquivDate = d.hotel.krwEquivDate;
+          }
+          if(Array.isArray(d.extraCosts)) days[i].extraCosts = d.extraCosts;
+          if(Array.isArray(d.flights)){
+            d.flights.forEach((f,fi)=>{
+              if(days[i].flights[fi] && f.cost != null){
+                days[i].flights[fi].cost = f.cost;
+                if(f.currency) days[i].flights[fi].currency = f.currency;
+              }
+            });
+          }
+          if(days[i].car && d.car && d.car.cost != null){
+            days[i].car.cost = d.car.cost;
+            if(d.car.currency) days[i].car.currency = d.car.currency;
+          }
         });
         render();
         renderQuicknav();
