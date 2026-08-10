@@ -317,29 +317,23 @@
 
   .cost-add-section{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);}
   .cost-add-form{display:flex;flex-direction:column;gap:6px;}
-  .cost-add-form .extra-day{
-    font-size:12px;border:1px dashed var(--line);border-radius:7px;
-    padding:7px 8px;background:#FAFAF6;color:var(--ink);
+  .cost-add-form input,
+  .cost-add-form select,
+  .cost-add-form button{
+    height:38px;box-sizing:border-box;font-size:12.5px;
+    border:1px dashed var(--line);border-radius:8px;background:#FAFAF6;color:var(--ink);
   }
-  .cost-add-form .extra-label{
-    width:100%;box-sizing:border-box;font-size:12.5px;
-    border:1px dashed var(--line);border-radius:7px;padding:8px 9px;background:#FAFAF6;
-  }
-  .cost-add-row-2{display:flex;align-items:center;gap:6px;}
-  .cost-add-row-2 .extra-cur{
-    flex:0 0 auto;
-    border:1px dashed var(--line);background:#FAFAF6;color:var(--ink-soft);
-    border-radius:7px;padding:8px 9px;font-size:12px;
-  }
+  .cost-add-row-1{display:grid;grid-template-columns:64px 1fr;gap:6px;}
+  .cost-add-form .extra-day{padding:0 6px;color:var(--ink-soft);}
+  .cost-add-form .extra-label{padding:0 10px;}
+  .cost-add-row-2{display:grid;grid-template-columns:36px 1fr 56px;gap:6px;}
+  .cost-add-row-2 .extra-cur{color:var(--ink-soft);font-weight:700;}
   .cost-add-row-2 .extra-amount{
-    flex:0 0 64px;width:64px;box-sizing:border-box;
-    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--ink);
-    border:1px dashed var(--line);border-radius:7px;padding:8px 6px;background:#FAFAF6;text-align:right;
+    font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;
+    text-align:right;padding:0 8px;
   }
   .cost-add-row-2 .extra-add-btn{
-    flex:1;
-    border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;
-    border-radius:7px;padding:8px 12px;font-size:12.5px;
+    border:1px solid var(--indigo-line);background:var(--indigo);color:#fff;font-weight:700;
   }
 
   .add-row{display:flex;gap:6px;margin-top:8px;}
@@ -812,8 +806,10 @@ function renderCostSummary(){
     <div class="cost-add-section">
       <div class="cost-section-label">🧾 지출 추가</div>
       <div class="cost-add-form">
-        <select class="extra-day">${dayOptions}</select>
-        <input type="text" class="extra-label" placeholder="항목명 (예: 편의점 간식)">
+        <div class="cost-add-row-1">
+          <select class="extra-day">${dayOptions}</select>
+          <input type="text" class="extra-label" placeholder="항목명 (예: 간식)">
+        </div>
         <div class="cost-add-row-2">
           <button class="extra-cur" data-cur="JPY">¥</button>
           <input type="number" class="extra-amount" inputmode="numeric" placeholder="금액">
