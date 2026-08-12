@@ -480,7 +480,7 @@
     <div class="todo-head" id="todo-head">
       <div class="left">
         <span class="todo-chevron" id="todo-chevron">▾</span>
-        <h2>✅ 출발 전 준비 체크리스트</h2>
+        <h2>✅ 체크리스트</h2>
       </div>
       <span class="todo-progress" id="todo-progress"></span>
     </div>
@@ -577,7 +577,7 @@ async function loadTodos(){
       if(parsed && Array.isArray(parsed.items) && Array.isArray(parsed.categories)){
         todos = parsed.items;
         todoCategories = parsed.categories;
-        todoCollapsed = !!parsed.collapsed;
+        // todoCollapsed는 일부러 불러오지 않음 - 페이지를 열 때마다 항상 접힌 상태로 시작
       }
     }
   }catch(e){ /* no saved todos yet, use defaults */ }
@@ -1012,7 +1012,7 @@ const days = [
 ];
 
 // 각 Day 카드의 접힘/펼침 상태. render()가 다시 실행돼도 이 상태를 유지합니다.
-const dayCollapsedState = days.map((_, i) => i !== 0);
+const dayCollapsedState = days.map(() => true);
 
 const suggestions = {
   nature:[
