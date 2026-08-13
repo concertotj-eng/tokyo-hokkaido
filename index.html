@@ -208,6 +208,15 @@
   }
   .list li.item-row:last-child{border-bottom:none;}
   .item-main{display:flex;align-items:center;gap:6px;}
+  .drag-handle{
+    flex-shrink:0;border:none;background:none;color:#C7C4B7;
+    font-size:16px;padding:4px 4px;cursor:grab;touch-action:none;
+    line-height:1;
+  }
+  .item-row.dragging, .todo-list li.dragging{
+    background:#F5F3EA;border-radius:8px;box-shadow:0 4px 14px rgba(34,38,47,0.15);
+  }
+  li.item-row, .todo-list li{touch-action:pan-y;}
   .list .t{
     font-family:'JetBrains Mono',monospace;font-size:11.5px;
     color:var(--ink-soft);min-width:42px;max-width:60px;flex-shrink:0;
@@ -603,9 +612,10 @@ function renderTodos(){
   todoCategories.forEach((cat)=>{
     const items = todos.map((x,i)=>({...x,idx:i})).filter(x=>x.cat===cat);
     if(!items.length) return;
-    html += `<div class="todo-cat-head"><span class="todo-cat">${cat}</span></div><ul class="todo-list">`;
+    html += `<div class="todo-cat-head"><span class="todo-cat">${cat}</span></div><ul class="todo-list" data-cat="${cat}">`;
     items.forEach(it=>{
-      html += `<li class="${it.done?'done':''}">
+      html += `<li class="${it.done?'done':''}" data-idx="${it.idx}">
+        <button class="drag-handle" title="드래그하여 순서 변경">⠿</button>
         <input type="checkbox" data-idx="${it.idx}" ${it.done?'checked':''}>
         <span class="txt2" contenteditable="true" data-idx="${it.idx}">${it.t}</span>
         <button class="del" data-idx="${it.idx}" aria-label="삭제">✕</button>
@@ -643,6 +653,15 @@ function renderTodos(){
       todos.splice(i,1);
       persistTodos();
       renderTodos();
+    });
+  });
+  todoCard.querySelectorAll('.todo-list').forEach(listEl=>{
+    setupDragReorder(listEl, {
+      itemSelector: 'li',
+      handleSelector: '.drag-handle',
+      getIndex: liEl => +liEl.dataset.idx,
+      getArray: () => todos,
+      afterReorder: () => { persistTodos(); renderTodos(); }
     });
   });
   function addChecklistItem(){
@@ -1142,6 +1161,68 @@ function renderQuicknav(){
   });
 }
 
+// 리스트 항목을 드래그해서 순서를 바꿀 수 있게 해주는 범용 함수.
+// listEl: <ul> 컨테이너. opts.getArray()가 반환하는 배열의 순서를 실제로 바꾼다.
+// opts.getIndex(li)는 그 li가 배열에서 몇 번째인지 알려주는 함수(체크리스트처럼
+// 카테고리별로 나뉘어 보여도, 실제 데이터 배열 상의 진짜 인덱스를 반환해야 함).
+function setupDragReorder(listEl, opts){
+  if(!listEl) return;
+  listEl.querySelectorAll(opts.handleSelector).forEach(handle=>{
+    handle.addEventListener('pointerdown', e=>{
+      e.preventDefault();
+      const li = handle.closest(opts.itemSelector);
+      if(!li) return;
+      const siblings = Array.from(listEl.querySelectorAll(opts.itemSelector));
+      const startPos = siblings.indexOf(li);
+      if(startPos < 0 || siblings.length < 2) return;
+      const itemHeight = li.getBoundingClientRect().height;
+      const startY = e.clientY;
+      let currentPos = startPos;
+
+      li.classList.add('dragging');
+      li.style.zIndex = 100;
+
+      function onMove(ev){
+        const dy = ev.clientY - startY;
+        li.style.transform = `translateY(${dy}px)`;
+        const rawDelta = Math.round(dy / itemHeight);
+        currentPos = Math.max(0, Math.min(siblings.length - 1, startPos + rawDelta));
+        siblings.forEach((el, idx)=>{
+          if(el === li) return;
+          let shift = 0;
+          if(startPos < currentPos && idx > startPos && idx <= currentPos) shift = -1;
+          else if(startPos > currentPos && idx < startPos && idx >= currentPos) shift = 1;
+          el.style.transition = 'transform .15s';
+          el.style.transform = shift ? `translateY(${shift * itemHeight}px)` : '';
+        });
+      }
+
+      function onUp(){
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+        siblings.forEach(el=>{ el.style.transform=''; el.style.transition=''; });
+        li.classList.remove('dragging');
+        li.style.zIndex='';
+
+        if(currentPos !== startPos){
+          const reordered = siblings.slice();
+          reordered.splice(startPos, 1);
+          reordered.splice(currentPos, 0, li);
+          const newOrderGlobalIdx = reordered.map(el => opts.getIndex(el));
+          const arr = opts.getArray();
+          const slotPositions = siblings.map(el => opts.getIndex(el)).sort((a,b)=>a-b);
+          const itemsInNewOrder = newOrderGlobalIdx.map(gi => arr[gi]);
+          slotPositions.forEach((slot, i)=>{ arr[slot] = itemsInNewOrder[i]; });
+          opts.afterReorder();
+        }
+      }
+
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp, {once:true});
+    });
+  });
+}
+
 function render(){
   timeline.innerHTML = '';
   days.forEach((day, di)=>{
@@ -1199,8 +1280,9 @@ function render(){
         ? `<button class="cost-badge" data-day="${di}" data-item="${ii}">${formatCost(it.cost, it.currency||'JPY')}</button>` : '';
       const mapBadge = it.url
         ? `<a class="map-badge" href="${it.url}" target="_blank" rel="noopener" title="구글맵에서 보기">📍</a>` : '';
-      itemsHtml += `<li class="item-row">
+      itemsHtml += `<li class="item-row" data-item-idx="${ii}">
         <div class="item-main">
+          <button class="drag-handle" title="드래그하여 순서 변경">⠿</button>
           <span class="t" contenteditable="true" data-day="${di}" data-item="${ii}">${it.t}</span>
           <span class="txt" contenteditable="true" data-day="${di}" data-item="${ii}">${it.x}</span>
           ${costBadge}
@@ -1208,8 +1290,6 @@ function render(){
           <button class="more-btn" data-day="${di}" data-item="${ii}" title="더보기">⋯</button>
         </div>
         <div class="item-more-row" hidden>
-          <button class="move-up" data-day="${di}" data-item="${ii}" ${ii===0?'disabled':''}>▲ 위로</button>
-          <button class="move-down" data-day="${di}" data-item="${ii}" ${ii===day.items.length-1?'disabled':''}>▼ 아래로</button>
           <button class="link-btn" data-day="${di}" data-item="${ii}">🔗 ${it.url?'링크 수정':'구글맵 링크 추가'}</button>
           <button class="cost-btn" data-day="${di}" data-item="${ii}">💰 ${it.cost!=null?'비용 수정':'비용 추가'}</button>
           <button class="del" data-day="${di}" data-item="${ii}">✕ 삭제</button>
@@ -1220,7 +1300,7 @@ function render(){
         </div>
         <div class="item-cost-row" hidden>
           <input type="number" class="cost-input" inputmode="numeric" data-day="${di}" data-item="${ii}" placeholder="금액 입력" value="${it.cost!=null?it.cost:''}">
-          <button class="cost-cur" data-day="${di}" data-item="${ii}" data-cur="${it.currency||'JPY'}">${(it.currency==='KRW')?'₩ 원':'¥ 엔'}</button>
+          <button class="cost-cur" data-day="${di}" data-item="${ii}" data-cur="${it.currency||'JPY'}">${(it.currency==='KRW')?'₩':'¥'}</button>
         </div>
       </li>`;
     });
@@ -1268,6 +1348,15 @@ function render(){
       </div>
     `;
     timeline.appendChild(el);
+
+    const listEl = el.querySelector('ul.list');
+    setupDragReorder(listEl, {
+      itemSelector: '.item-row',
+      handleSelector: '.drag-handle',
+      getIndex: liEl => +liEl.dataset.itemIdx,
+      getArray: () => day.items,
+      afterReorder: () => { persist(); render(); }
+    });
   });
 
   document.querySelectorAll('.day-head').forEach(el=>{
@@ -1408,28 +1497,6 @@ function render(){
     });
   });
 
-  document.querySelectorAll('.move-up').forEach(el=>{
-    el.addEventListener('click', e=>{
-      const d = +e.currentTarget.dataset.day, i = +e.currentTarget.dataset.item;
-      if(i>0){
-        const arr = days[d].items;
-        [arr[i-1], arr[i]] = [arr[i], arr[i-1]];
-        persist();
-        render();
-      }
-    });
-  });
-  document.querySelectorAll('.move-down').forEach(el=>{
-    el.addEventListener('click', e=>{
-      const d = +e.currentTarget.dataset.day, i = +e.currentTarget.dataset.item;
-      const arr = days[d].items;
-      if(i<arr.length-1){
-        [arr[i+1], arr[i]] = [arr[i], arr[i+1]];
-        persist();
-        render();
-      }
-    });
-  });
   document.querySelectorAll('.del').forEach(el=>{
     el.addEventListener('click', e=>{
       const d = +e.target.dataset.day, i = +e.target.dataset.item;
@@ -1502,7 +1569,9 @@ function render(){
         delete days[d].items[i].cost;
       }
       persist();
-      render();
+      renderCostSummary();
+      // 통화(¥/₩) 버튼을 이어서 클릭할 시간을 준 뒤 화면을 정리합니다.
+      setTimeout(render, 200);
     });
   });
   document.querySelectorAll('.item-cost-row .cost-cur').forEach(el=>{
@@ -1511,10 +1580,10 @@ function render(){
       const d = +btn.dataset.day, i = +btn.dataset.item;
       const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
       btn.dataset.cur = next;
-      btn.textContent = next === 'JPY' ? '¥ 엔' : '₩ 원';
+      btn.textContent = next === 'JPY' ? '¥' : '₩';
       days[d].items[i].currency = next;
       persist();
-      renderCostSummary();
+      render();
     });
   });
   document.querySelectorAll('.hotel-cost-btn').forEach(el=>{
@@ -1563,7 +1632,8 @@ function render(){
         delete days[d].hotel.krwEquivDate;
       }
       persist();
-      render();
+      renderCostSummary();
+      setTimeout(render, 200);
     });
   });
 
@@ -1596,7 +1666,8 @@ function render(){
         delete days[d].flights[fi].currency;
       }
       persist();
-      render();
+      renderCostSummary();
+      setTimeout(render, 200);
     });
   });
 
@@ -1629,7 +1700,8 @@ function render(){
         delete days[d].car.currency;
       }
       persist();
-      render();
+      renderCostSummary();
+      setTimeout(render, 200);
     });
   });
 
