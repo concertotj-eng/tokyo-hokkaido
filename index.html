@@ -1583,7 +1583,9 @@ function render(){
       btn.textContent = next === 'JPY' ? '¥' : '₩';
       days[d].items[i].currency = next;
       persist();
-      render();
+      // 여기서 화면을 다시 그리지 않습니다 - 그러면 방금 열어둔 금액 입력칸이
+      // 사라져서 금액을 마저 입력할 수 없게 됩니다. 금액 입력을 마치고
+      // 다른 곳을 탭하면(포커스 아웃) 그때 화면이 정리됩니다.
     });
   });
   document.querySelectorAll('.hotel-cost-btn').forEach(el=>{
@@ -1600,6 +1602,7 @@ function render(){
       const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
       btn.dataset.cur = next;
       btn.textContent = next === 'JPY' ? '¥' : '₩';
+      if(days[d].hotel) days[d].hotel.currency = next;
     });
   });
   document.querySelectorAll('.hotel-cost-input').forEach(el=>{
@@ -1608,10 +1611,10 @@ function render(){
       const val = e.target.value.trim();
       const row = e.target.closest('.hotel-cost-row');
       const curBtn = row.querySelector('.hotel-cost-cur');
-      const cur = curBtn.dataset.cur;
+      if(!days[d].hotel.currency) days[d].hotel.currency = curBtn.dataset.cur;
+      const cur = days[d].hotel.currency;
       if(val !== ''){
         days[d].hotel.cost = Number(val);
-        days[d].hotel.currency = cur;
         if(cur === 'JPY'){
           const result = await fetchJpyToKrw(Number(val));
           if(result){
@@ -1647,9 +1650,11 @@ function render(){
   document.querySelectorAll('.flight-cost-cur').forEach(el=>{
     el.addEventListener('click', e=>{
       const btn = e.currentTarget;
+      const d = +btn.dataset.day, fi = +btn.dataset.fi;
       const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
       btn.dataset.cur = next;
       btn.textContent = next === 'JPY' ? '¥' : '₩';
+      if(days[d].flights[fi]) days[d].flights[fi].currency = next;
     });
   });
   document.querySelectorAll('.flight-cost-input').forEach(el=>{
@@ -1657,10 +1662,9 @@ function render(){
       const d = +e.target.dataset.day, fi = +e.target.dataset.fi;
       const val = e.target.value.trim();
       const row = e.target.closest('.flight-cost-row');
-      const cur = row.querySelector('.flight-cost-cur').dataset.cur;
+      if(!days[d].flights[fi].currency) days[d].flights[fi].currency = row.querySelector('.flight-cost-cur').dataset.cur;
       if(val !== ''){
         days[d].flights[fi].cost = Number(val);
-        days[d].flights[fi].currency = cur;
       } else {
         delete days[d].flights[fi].cost;
         delete days[d].flights[fi].currency;
@@ -1681,9 +1685,11 @@ function render(){
   document.querySelectorAll('.car-cost-cur').forEach(el=>{
     el.addEventListener('click', e=>{
       const btn = e.currentTarget;
+      const d = +btn.dataset.day;
       const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
       btn.dataset.cur = next;
       btn.textContent = next === 'JPY' ? '¥' : '₩';
+      if(days[d].car) days[d].car.currency = next;
     });
   });
   document.querySelectorAll('.car-cost-input').forEach(el=>{
@@ -1691,10 +1697,9 @@ function render(){
       const d = +e.target.dataset.day;
       const val = e.target.value.trim();
       const row = e.target.closest('.car-cost-row');
-      const cur = row.querySelector('.car-cost-cur').dataset.cur;
+      if(!days[d].car.currency) days[d].car.currency = row.querySelector('.car-cost-cur').dataset.cur;
       if(val !== ''){
         days[d].car.cost = Number(val);
-        days[d].car.currency = cur;
       } else {
         delete days[d].car.cost;
         delete days[d].car.currency;
