@@ -341,9 +341,9 @@
     height:38px;box-sizing:border-box;font-size:12.5px;
     border:1px dashed var(--line);border-radius:8px;background:#FAFAF6;color:var(--ink);
   }
-  .cost-add-row-1{display:grid;grid-template-columns:64px 1fr;gap:6px;}
-  .cost-add-form .extra-day{padding:0 6px;color:var(--ink-soft);}
-  .cost-add-form .extra-label{padding:0 10px;}
+  .cost-add-row-1{display:grid;grid-template-columns:1fr 72px;gap:6px;}
+  .cost-add-form .extra-day, .cost-add-form .extra-type{padding:0 6px;color:var(--ink-soft);}
+  .cost-add-form .extra-label{width:100%;padding:0 10px;}
   .cost-add-row-2{display:grid;grid-template-columns:36px 1fr 56px;gap:6px;}
   .cost-add-row-2 .extra-cur{color:var(--ink-soft);font-weight:700;}
   .cost-add-row-2 .extra-amount{
@@ -723,7 +723,7 @@ costHead.addEventListener('click', ()=>{
 });
 
 function calcDayCost(day){
-  const cats = { flight:{jpy:0,krw:0}, hotel:{jpy:0,krw:0}, car:{jpy:0,krw:0}, item:{jpy:0,krw:0}, extra:{jpy:0,krw:0} };
+  const cats = { flight:{jpy:0,krw:0}, hotel:{jpy:0,krw:0}, car:{jpy:0,krw:0}, item:{jpy:0,krw:0}, shopping:{jpy:0,krw:0}, extra:{jpy:0,krw:0} };
   (day.flights||[]).forEach(f=>{
     if(f.cost != null && f.cost !== ''){
       const n = Number(f.cost) || 0;
@@ -744,12 +744,16 @@ function calcDayCost(day){
       if((it.currency||'JPY') === 'KRW') cats.item.krw += n; else cats.item.jpy += n;
     }
   });
+  (day.shoppingCosts||[]).forEach(sc=>{
+    const n = Number(sc.cost) || 0;
+    if((sc.currency||'JPY') === 'KRW') cats.shopping.krw += n; else cats.shopping.jpy += n;
+  });
   (day.extraCosts||[]).forEach(ec=>{
     const n = Number(ec.cost) || 0;
     if((ec.currency||'JPY') === 'KRW') cats.extra.krw += n; else cats.extra.jpy += n;
   });
-  const jpy = cats.flight.jpy + cats.hotel.jpy + cats.car.jpy + cats.item.jpy + cats.extra.jpy;
-  const krw = cats.flight.krw + cats.hotel.krw + cats.car.krw + cats.item.krw + cats.extra.krw;
+  const jpy = cats.flight.jpy + cats.hotel.jpy + cats.car.jpy + cats.item.jpy + cats.shopping.jpy + cats.extra.jpy;
+  const krw = cats.flight.krw + cats.hotel.krw + cats.car.krw + cats.item.krw + cats.shopping.krw + cats.extra.krw;
   return {cats, jpy, krw};
 }
 
@@ -758,6 +762,7 @@ const COST_CAT_META = [
   {key:'hotel', icon:'🏨', label:'숙소'},
   {key:'car', icon:'🚗', label:'렌터카'},
   {key:'item', icon:'🎫', label:'일정·활동'},
+  {key:'shopping', icon:'🛍️', label:'쇼핑'},
   {key:'extra', icon:'🧾', label:'기타 지출'}
 ];
 
@@ -766,8 +771,8 @@ let costCatOpen = {}; // 카테고리별 펼침 상태 (기본 전부 접힘)
 function renderCostSummary(){
   applyCostCollapsedState();
   let totalJpy = 0, totalKrw = 0;
-  const catGrand = { flight:{jpy:0,krw:0}, hotel:{jpy:0,krw:0}, car:{jpy:0,krw:0}, item:{jpy:0,krw:0}, extra:{jpy:0,krw:0} };
-  const catLines = { flight:[], hotel:[], car:[], item:[], extra:[] };
+  const catGrand = { flight:{jpy:0,krw:0}, hotel:{jpy:0,krw:0}, car:{jpy:0,krw:0}, item:{jpy:0,krw:0}, shopping:{jpy:0,krw:0}, extra:{jpy:0,krw:0} };
+  const catLines = { flight:[], hotel:[], car:[], item:[], shopping:[], extra:[] };
 
   days.forEach((day, di)=>{
     const {cats, jpy, krw} = calcDayCost(day);
@@ -791,6 +796,9 @@ function renderCostSummary(){
     (day.items||[]).forEach((it)=>{
       if(it.cost == null || it.cost === '') return;
       catLines.item.push(`<tr><td class="c-label">Day${day.num} · ${it.x}</td><td class="c-amt">${formatCost(it.cost, it.currency||'JPY')}</td><td class="c-x"></td></tr>`);
+    });
+    (day.shoppingCosts||[]).forEach((sc, si)=>{
+      catLines.shopping.push(`<tr><td class="c-label">Day${day.num} · ${sc.label}</td><td class="c-amt">${formatCost(sc.cost, sc.currency||'JPY')}</td><td class="c-x"><button class="del-shopping" data-day="${di}" data-idx="${si}">✕</button></td></tr>`);
     });
     (day.extraCosts||[]).forEach((ec, ei)=>{
       catLines.extra.push(`<tr><td class="c-label">Day${day.num} · ${ec.label}</td><td class="c-amt">${formatCost(ec.cost, ec.currency||'JPY')}</td><td class="c-x"><button class="del-extra" data-day="${di}" data-idx="${ei}">✕</button></td></tr>`);
@@ -836,8 +844,12 @@ function renderCostSummary(){
       <div class="cost-add-form">
         <div class="cost-add-row-1">
           <select class="extra-day">${dayOptions}</select>
-          <input type="text" class="extra-label" placeholder="항목명 (예: 간식)">
+          <select class="extra-type">
+            <option value="extra">기타</option>
+            <option value="shopping">쇼핑</option>
+          </select>
         </div>
+        <input type="text" class="extra-label" placeholder="항목명 (예: 간식, 기념품)">
         <div class="cost-add-row-2">
           <button class="extra-cur" data-cur="JPY">¥</button>
           <input type="number" class="extra-amount" inputmode="numeric" placeholder="금액">
@@ -862,6 +874,14 @@ function renderCostSummary(){
       renderCostSummary();
     });
   });
+  costCard.querySelectorAll('.del-shopping').forEach(el=>{
+    el.addEventListener('click', e=>{
+      const d = +e.currentTarget.dataset.day, idx = +e.currentTarget.dataset.idx;
+      days[d].shoppingCosts.splice(idx,1);
+      persist();
+      renderCostSummary();
+    });
+  });
   const curBtn = costCard.querySelector('.extra-cur');
   if(curBtn){
     curBtn.addEventListener('click', e=>{
@@ -873,16 +893,25 @@ function renderCostSummary(){
   }
   function addExtra(){
     const dayIn = costCard.querySelector('.extra-day');
+    const typeIn = costCard.querySelector('.extra-type');
     const labelIn = costCard.querySelector('.extra-label');
     const amountIn = costCard.querySelector('.extra-amount');
     const curBtnEl = costCard.querySelector('.extra-cur');
     const d = +dayIn.value;
+    const type = typeIn.value; // 'extra' | 'shopping'
     const label = labelIn.value.trim();
     const amount = amountIn.value.trim();
     if(label && amount){
-      if(!days[d].extraCosts) days[d].extraCosts = [];
-      days[d].extraCosts.push({label, cost: Number(amount), currency: curBtnEl.dataset.cur});
-      costCatOpen.extra = true;
+      const entry = {label, cost: Number(amount), currency: curBtnEl.dataset.cur};
+      if(type === 'shopping'){
+        if(!days[d].shoppingCosts) days[d].shoppingCosts = [];
+        days[d].shoppingCosts.push(entry);
+        costCatOpen.shopping = true;
+      } else {
+        if(!days[d].extraCosts) days[d].extraCosts = [];
+        days[d].extraCosts.push(entry);
+        costCatOpen.extra = true;
+      }
       persist();
       renderCostSummary();
     }
@@ -918,7 +947,7 @@ const days = [
       {t:"13:30", name:"모리미술관 (롯폰기힐즈)", pid:"ChIJg5RCD3eLGGAR6dbIHRM98w8"},
       {t:"16:00", name:"국립신미술관", pid:"ChIJP-vO9nuLGGARGJ2q8uryJUA"}
     ],
-    extraCosts:[]
+    extraCosts:[], shoppingCosts:[]
   },
   {
     num:2, date:"8/24 (월)", loc:"도쿄 → 삿포로",
@@ -941,7 +970,7 @@ const days = [
     places:[
       {t:"10:00", name:"산토리미술관 (도쿄 미드타운)", pid:"ChIJbSqxxHiLGGARKEK0IzZMksI"}
     ],
-    extraCosts:[]
+    extraCosts:[], shoppingCosts:[]
   },
   {
     num:3, date:"8/25 (화)", loc:"삿포로 → 후라노",
@@ -961,7 +990,7 @@ const days = [
       {t:"오후", name:"팜 토미타", pid:"ChIJdzcW1F2zDF8Rkm1ghwLPbbc"},
       {t:"오후", name:"패치워크 로드", pid:"ChIJd9Pr7vPFDF8RHO34QlpJINs"}
     ],
-    extraCosts:[]
+    extraCosts:[], shoppingCosts:[]
   },
   {
     num:4, date:"8/26 (수)", loc:"후라노 → 비에이(시라히게온천)",
@@ -981,7 +1010,7 @@ const days = [
       {t:"오전", name:"파노라마 로드", pid:"ChIJ2-2spEq0DF8RLtJVk9hpB0E"},
       {t:"오후", name:"시로히게 폭포", pid:"ChIJX3VG4K7MDF8RJmYvjz6VBgU"}
     ],
-    extraCosts:[]
+    extraCosts:[], shoppingCosts:[]
   },
   {
     num:5, date:"8/27 (목)", loc:"비에이 → 다이세츠잔(아사히다케)",
@@ -1006,7 +1035,7 @@ const days = [
       {t:"08:30", name:"아사히다케 로프웨이 산록역", pid:"ChIJH-lrt7PXDF8RXBNa8gRGnAw"},
       {t:"09:00", name:"스가타미노이케", pid:"ChIJ-6SI11EpDV8RvpJ7-fZKvos"}
     ],
-    extraCosts:[]
+    extraCosts:[], shoppingCosts:[]
   },
   {
     num:6, date:"8/28 (금)", loc:"아사히다케 → 신치토세 → 도쿄 → 서울",
@@ -1026,7 +1055,7 @@ const days = [
       {t:"기념품/면세품 최종 확인", done:false}
     ],
     places:[],
-    extraCosts:[]
+    extraCosts:[], shoppingCosts:[]
   }
 ];
 
@@ -1126,6 +1155,7 @@ async function loadPersisted(){
             if(d.hotel.krwEquivDate) days[i].hotel.krwEquivDate = d.hotel.krwEquivDate;
           }
           if(Array.isArray(d.extraCosts)) days[i].extraCosts = d.extraCosts;
+          if(Array.isArray(d.shoppingCosts)) days[i].shoppingCosts = d.shoppingCosts;
           if(Array.isArray(d.flights)){
             d.flights.forEach((f,fi)=>{
               if(days[i].flights[fi] && f.cost != null){
@@ -1735,6 +1765,7 @@ function setupRealtimeSync(){
             if(d.hotel.krwEquivDate) days[i].hotel.krwEquivDate = d.hotel.krwEquivDate;
           }
           if(Array.isArray(d.extraCosts)) days[i].extraCosts = d.extraCosts;
+          if(Array.isArray(d.shoppingCosts)) days[i].shoppingCosts = d.shoppingCosts;
           if(Array.isArray(d.flights)){
             d.flights.forEach((f,fi)=>{
               if(days[i].flights[fi] && f.cost != null){
