@@ -565,7 +565,26 @@ const todoProgress = document.getElementById('todo-progress');
 const todoHead = document.getElementById('todo-head');
 const todoChevron = document.getElementById('todo-chevron');
 
+let todosLoaded = false; // Firestore 실시간 감지의 '첫 응답'이 오기 전까지는 저장을 막음
+
+async function waitUntilLoaded(flagGetter, timeoutMs=8000){
+  const start = Date.now();
+  while(!flagGetter()){
+    if(Date.now() - start > timeoutMs) return false; // 서버 응답이 비정상적으로 오래 걸리는 경우 포기
+    await new Promise(r=>setTimeout(r, 80));
+  }
+  return true;
+}
+
 async function persistTodos(){
+  if(db && !todosLoaded){
+    // 아직 서버의 최신 데이터를 확인받기 전입니다. 지금 바로 저장하면
+    // 곧이어 도착할 서버 데이터가 이 저장 내용을 덮어써버릴 수 있으므로,
+    // 최신 데이터를 확인받을 때까지 짧게 기다렸다가 저장합니다.
+    // (버튼을 누른 시점의 값은 그대로 유지되므로 입력한 내용이 씹히지 않습니다.)
+    const ok = await waitUntilLoaded(()=>todosLoaded);
+    if(!ok){ console.warn('체크리스트 초기 데이터 확인 시간 초과 - 저장을 건너뜁니다.'); return; }
+  }
   try{
     await storageAPI.set('itinerary_todos', JSON.stringify({
       categories: todoCategories,
@@ -576,9 +595,12 @@ async function persistTodos(){
   }catch(e){ console.error('todo save failed', e); }
 }
 
-// 저장된 데이터가 있으면 그 내용을 그대로 신뢰합니다.
-// 사용자가 지우거나 수정한 내용을 자동으로 되돌리거나 채워 넣지 않습니다.
+// 이 함수는 더 이상 '한 번 읽기'를 하지 않습니다. Firestore 사용 시에는
+// setupRealtimeSync()의 실시간 감지가 대신 초기 데이터를 채워줍니다.
+// (한 번 읽기 + 실시간 감지가 따로 있으면, 그 사이 타이밍에 저장이 발생해
+// 기본값으로 덮어써지는 문제가 있었습니다.)
 async function loadTodos(){
+  if(db) return; // Firestore를 쓰는 경우 setupRealtimeSync에서 처리
   try{
     const res = await storageAPI.get('itinerary_todos', false);
     if(res && res.value){
@@ -586,10 +608,10 @@ async function loadTodos(){
       if(parsed && Array.isArray(parsed.items) && Array.isArray(parsed.categories)){
         todos = parsed.items;
         todoCategories = parsed.categories;
-        // todoCollapsed는 일부러 불러오지 않음 - 페이지를 열 때마다 항상 접힌 상태로 시작
       }
     }
   }catch(e){ /* no saved todos yet, use defaults */ }
+  todosLoaded = true;
 }
 
 function applyCollapsedState(){
@@ -1130,15 +1152,23 @@ function flashSave(){
 }
 
 const ITINERARY_VERSION = 7;
+let daysLoaded = false; // Firestore 실시간 감지의 '첫 응답'이 오기 전까지는 저장을 막음
 
 async function persist(){
+  if(db && !daysLoaded){
+    const ok = await waitUntilLoaded(()=>daysLoaded);
+    if(!ok){ console.warn('일정 초기 데이터 확인 시간 초과 - 저장을 건너뜁니다.'); return; }
+  }
   try{
     await storageAPI.set('itinerary_days', JSON.stringify({version: ITINERARY_VERSION, days}), false);
     flashSave();
   }catch(e){ console.error('save failed', e); }
 }
 
+// 이 함수는 더 이상 '한 번 읽기'를 하지 않습니다. Firestore 사용 시에는
+// setupRealtimeSync()의 실시간 감지가 대신 초기 데이터를 채워줍니다.
 async function loadPersisted(){
+  if(db) return; // Firestore를 쓰는 경우 setupRealtimeSync에서 처리
   try{
     const res = await storageAPI.get('itinerary_days', false);
     if(res && res.value){
@@ -1173,6 +1203,7 @@ async function loadPersisted(){
       }
     }
   }catch(e){ /* no saved data yet */ }
+  daysLoaded = true;
 }
 
 function renderQuicknav(){
@@ -1406,15 +1437,10 @@ function render(){
       const dayEl = document.getElementById('day-' + days[di].num);
       const dateEl = dayEl.querySelector('.day-date');
       const locEl = dayEl.querySelector('.day-loc');
-      const nowEditing = dateEl.getAttribute('contenteditable') === 'true';
-      if(nowEditing){
-        dateEl.removeAttribute('contenteditable');
-        locEl.removeAttribute('contenteditable');
-      } else {
-        dateEl.setAttribute('contenteditable','true');
-        locEl.setAttribute('contenteditable','true');
-        dateEl.focus();
-      }
+      // 항상 편집 모드를 켭니다 (끄는 건 각 칸에서 포커스가 빠질 때 자동으로 처리돼요).
+      dateEl.setAttribute('contenteditable','true');
+      locEl.setAttribute('contenteditable','true');
+      dateEl.focus();
     });
   });
   document.querySelectorAll('.day-date').forEach(el=>{
@@ -1752,55 +1778,69 @@ function setupRealtimeSync(){
   if(!db) return;
 
   db.collection('trip').doc('itinerary_days').onSnapshot((snap)=>{
-    if(!snap.exists) return;
-    try{
-      const parsed = JSON.parse(snap.data().value);
-      if(parsed && Array.isArray(parsed.days) && parsed.days.length === days.length){
-        const anyMenuOpen = !!document.querySelector('.item-more-row:not([hidden])');
-        if(anyMenuOpen) return; // avoid disrupting an open menu mid-interaction
-        parsed.days.forEach((d,i)=>{
-          days[i].items = d.items;
-          if(Array.isArray(d.dayTodos)) days[i].dayTodos = d.dayTodos;
-          if(typeof d.date === 'string') days[i].date = d.date;
-          if(typeof d.loc === 'string') days[i].loc = d.loc;
-          if(days[i].hotel && d.hotel && d.hotel.cost != null){
-            days[i].hotel.cost = d.hotel.cost;
-            if(d.hotel.currency) days[i].hotel.currency = d.hotel.currency;
-            if(d.hotel.krwEquiv != null) days[i].hotel.krwEquiv = d.hotel.krwEquiv;
-            if(d.hotel.krwEquivDate) days[i].hotel.krwEquivDate = d.hotel.krwEquivDate;
-          }
-          if(Array.isArray(d.extraCosts)) days[i].extraCosts = d.extraCosts;
-          if(Array.isArray(d.shoppingCosts)) days[i].shoppingCosts = d.shoppingCosts;
-          if(Array.isArray(d.flights)){
-            d.flights.forEach((f,fi)=>{
-              if(days[i].flights[fi] && f.cost != null){
-                days[i].flights[fi].cost = f.cost;
-                if(f.currency) days[i].flights[fi].currency = f.currency;
+    if(snap.exists){
+      try{
+        const parsed = JSON.parse(snap.data().value);
+        if(parsed && Array.isArray(parsed.days) && parsed.days.length === days.length){
+          const anyMenuOpen = !!document.querySelector('.item-more-row:not([hidden])');
+          const active = document.activeElement;
+          const isEditingField = !!(active && (active.isContentEditable || active.tagName === 'INPUT' || active.tagName === 'TEXTAREA'));
+          if(!anyMenuOpen && !isEditingField){
+            parsed.days.forEach((d,i)=>{
+              days[i].items = d.items;
+              if(Array.isArray(d.dayTodos)) days[i].dayTodos = d.dayTodos;
+              if(typeof d.date === 'string') days[i].date = d.date;
+              if(typeof d.loc === 'string') days[i].loc = d.loc;
+              if(days[i].hotel && d.hotel && d.hotel.cost != null){
+                days[i].hotel.cost = d.hotel.cost;
+                if(d.hotel.currency) days[i].hotel.currency = d.hotel.currency;
+                if(d.hotel.krwEquiv != null) days[i].hotel.krwEquiv = d.hotel.krwEquiv;
+                if(d.hotel.krwEquivDate) days[i].hotel.krwEquivDate = d.hotel.krwEquivDate;
+              }
+              if(Array.isArray(d.extraCosts)) days[i].extraCosts = d.extraCosts;
+              if(Array.isArray(d.shoppingCosts)) days[i].shoppingCosts = d.shoppingCosts;
+              if(Array.isArray(d.flights)){
+                d.flights.forEach((f,fi)=>{
+                  if(days[i].flights[fi] && f.cost != null){
+                    days[i].flights[fi].cost = f.cost;
+                    if(f.currency) days[i].flights[fi].currency = f.currency;
+                  }
+                });
+              }
+              if(days[i].car && d.car && d.car.cost != null){
+                days[i].car.cost = d.car.cost;
+                if(d.car.currency) days[i].car.currency = d.car.currency;
               }
             });
+            render();
+            renderQuicknav();
           }
-          if(days[i].car && d.car && d.car.cost != null){
-            days[i].car.cost = d.car.cost;
-            if(d.car.currency) days[i].car.currency = d.car.currency;
-          }
-        });
-        render();
-        renderQuicknav();
-      }
-    }catch(e){ /* ignore malformed remote data */ }
+        }
+      }catch(e){ /* ignore malformed remote data */ }
+    }
+    // 데이터가 아예 없거나(첫 사용) 형식이 안 맞아도, 서버 응답을 받았다는
+    // 사실 자체가 중요합니다 - 이제 저장(쓰기)을 해도 안전합니다.
+    daysLoaded = true;
   });
 
   db.collection('trip').doc('itinerary_todos').onSnapshot((snap)=>{
-    if(!snap.exists) return;
-    try{
-      const parsed = JSON.parse(snap.data().value);
-      if(parsed && Array.isArray(parsed.items) && Array.isArray(parsed.categories)){
-        todos = parsed.items;
-        todoCategories = parsed.categories;
-        todoCollapsed = !!parsed.collapsed;
-        renderTodos();
-      }
-    }catch(e){ /* ignore malformed remote data */ }
+    if(snap.exists){
+      try{
+        const parsed = JSON.parse(snap.data().value);
+        if(parsed && Array.isArray(parsed.items) && Array.isArray(parsed.categories)){
+          const active = document.activeElement;
+          const isEditingField = !!(active && (active.isContentEditable || active.tagName === 'INPUT' || active.tagName === 'TEXTAREA'));
+          if(!isEditingField){
+            todos = parsed.items;
+            todoCategories = parsed.categories;
+            renderTodos();
+          }
+        }
+      }catch(e){ /* ignore malformed remote data */ }
+    }
+    // 데이터가 아예 없거나(첫 사용) 형식이 안 맞아도, 서버 응답을 받았다는
+    // 사실 자체가 중요합니다 - 이제 저장(쓰기)을 해도 안전합니다.
+    todosLoaded = true;
   });
 }
 
