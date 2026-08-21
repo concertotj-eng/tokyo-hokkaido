@@ -884,6 +884,7 @@ function renderCostSummary(){
   });
   const curBtn = costCard.querySelector('.extra-cur');
   if(curBtn){
+    curBtn.addEventListener('mousedown', e=>{ e.preventDefault(); });
     curBtn.addEventListener('click', e=>{
       const btn = e.currentTarget;
       const next = btn.dataset.cur === 'JPY' ? 'KRW' : 'JPY';
@@ -1605,6 +1606,7 @@ function render(){
     });
   });
   document.querySelectorAll('.item-cost-row .cost-cur').forEach(el=>{
+    el.addEventListener('mousedown', e=>{ e.preventDefault(); });
     el.addEventListener('click', e=>{
       const btn = e.currentTarget;
       const d = +btn.dataset.day, i = +btn.dataset.item;
@@ -1626,6 +1628,7 @@ function render(){
     });
   });
   document.querySelectorAll('.hotel-cost-cur').forEach(el=>{
+    el.addEventListener('mousedown', e=>{ e.preventDefault(); });
     el.addEventListener('click', e=>{
       const btn = e.currentTarget;
       const d = +btn.dataset.day;
@@ -1678,6 +1681,7 @@ function render(){
     });
   });
   document.querySelectorAll('.flight-cost-cur').forEach(el=>{
+    el.addEventListener('mousedown', e=>{ e.preventDefault(); });
     el.addEventListener('click', e=>{
       const btn = e.currentTarget;
       const d = +btn.dataset.day, fi = +btn.dataset.fi;
@@ -1713,6 +1717,7 @@ function render(){
     });
   });
   document.querySelectorAll('.car-cost-cur').forEach(el=>{
+    el.addEventListener('mousedown', e=>{ e.preventDefault(); });
     el.addEventListener('click', e=>{
       const btn = e.currentTarget;
       const d = +btn.dataset.day;
